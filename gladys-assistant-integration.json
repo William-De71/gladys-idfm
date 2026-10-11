@@ -1,0 +1,1582 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Île-de-France Mobilités",
+  "description": {
+    "en": "RER, Transilien, metro, tram, bus: departures and traffic in real time.",
+    "fr": "RER, Transilien, métro, tram, bus : départs et trafic en temps réel."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-idfm:0.1.0",
+  "gladys_version": ">=5.1.1",
+  "categories": ["services"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-idfm/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "PRIM API key",
+        "fr": "Clé d’API PRIM"
+      },
+      "description": {
+        "en": "The data come from PRIM, the open data platform of Île-de-France Mobilités: real-time departures of RER, Transilien, metro, tram and bus, and the traffic disruptions. The key is free: create an account, then generate a token in \"My authentication tokens\". A new account allows 1 000 requests a day per API; the integration counts them and spaces its reads to stay below.",
+        "fr": "Les données viennent de PRIM, la plateforme de données ouvertes d’Île-de-France Mobilités : prochains passages en temps réel des RER, Transilien, métro, tram et bus, et perturbations du trafic. La clé est gratuite : créez un compte, puis générez un jeton dans « Mes jetons d’authentification ». Un nouveau compte autorise 1 000 requêtes par jour et par API ; l’intégration les compte et espace ses lectures pour rester en dessous."
+      },
+      "links": [
+        {
+          "url": "https://prim.iledefrance-mobilites.fr/fr/aide-et-contact/documentation/donnees-disponibles/api/generer-un-jeton-pour-acceder-aux-api",
+          "label": {
+            "en": "Get a free API key",
+            "fr": "Obtenir une clé gratuite"
+          }
+        },
+        {
+          "url": "https://prim.iledefrance-mobilites.fr/fr/ma-consommation-api",
+          "label": {
+            "en": "My quotas (raise them)",
+            "fr": "Mes quotas (les augmenter)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "api_key",
+      "type": "secret",
+      "label": {
+        "en": "API key",
+        "fr": "Clé d’API"
+      },
+      "description": {
+        "en": "The token generated on PRIM (shown only once).",
+        "fr": "Le jeton généré sur PRIM (affiché une seule fois)."
+      },
+      "required": true
+    },
+    {
+      "key": "stop_1_section",
+      "type": "section",
+      "label": {
+        "en": "Stop 1",
+        "fr": "Arrêt 1"
+      },
+      "description": {
+        "en": "The stop where you take your train, metro, tram or bus, and its line: the departures are read in real time. A stop name (\"Massy - Palaiseau\") or its number given by the \"Find a stop\" button. With a line, the name is searched among its stops. The direction keeps only the departures whose destination contains these words (\"Robinson\", \"Saint-Rémy | Massy\"). The travel window saves the quota: the stop is then read only from an hour before it to its end.",
+        "fr": "L’arrêt où vous prenez votre train, métro, tram ou bus, et sa ligne : les départs sont lus en temps réel. Un nom d’arrêt (« Massy - Palaiseau ») ou son numéro donné par le bouton « Chercher un arrêt ». Avec une ligne, le nom est cherché parmi ses arrêts. La direction ne garde que les départs dont la destination contient ces mots (« Robinson », « Saint-Rémy | Massy »). La plage horaire économise le quota : l’arrêt n’est alors lu que d’une heure avant jusqu’à sa fin."
+      }
+    },
+    {
+      "key": "stop_1",
+      "type": "string",
+      "label": {
+        "en": "Stop",
+        "fr": "Arrêt"
+      },
+      "placeholder": {
+        "en": "Massy - Palaiseau",
+        "fr": "Massy - Palaiseau"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_1_line",
+      "type": "string",
+      "label": {
+        "en": "Line",
+        "fr": "Ligne"
+      },
+      "description": {
+        "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+      },
+      "placeholder": {
+        "en": "RER B",
+        "fr": "RER B"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_1_direction",
+      "type": "string",
+      "label": {
+        "en": "Direction",
+        "fr": "Direction"
+      },
+      "description": {
+        "en": "Words of the destination. Empty: every direction.",
+        "fr": "Des mots de la destination. Vide : toutes les directions."
+      },
+      "placeholder": {
+        "en": "Paris",
+        "fr": "Paris"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_1_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+      },
+      "placeholder": {
+        "en": "07:00-09:30",
+        "fr": "07:00-09:30"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_1_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "stop_2_section",
+      "type": "section",
+      "label": {
+        "en": "Stop 2 (optional)",
+        "fr": "Arrêt 2 (optionnel)"
+      },
+      "description": {
+        "en": "Same fields as stop 1, for example the way back. Leave empty when unused.",
+        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile."
+      }
+    },
+    {
+      "key": "stop_2",
+      "type": "string",
+      "label": {
+        "en": "Stop",
+        "fr": "Arrêt"
+      },
+      "placeholder": {
+        "en": "Châtelet",
+        "fr": "Châtelet"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_2_line",
+      "type": "string",
+      "label": {
+        "en": "Line",
+        "fr": "Ligne"
+      },
+      "description": {
+        "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+      },
+      "placeholder": {
+        "en": "Métro 14",
+        "fr": "Métro 14"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_2_direction",
+      "type": "string",
+      "label": {
+        "en": "Direction",
+        "fr": "Direction"
+      },
+      "description": {
+        "en": "Words of the destination. Empty: every direction.",
+        "fr": "Des mots de la destination. Vide : toutes les directions."
+      },
+      "placeholder": {
+        "en": "Saint-Denis",
+        "fr": "Saint-Denis"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_2_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+      },
+      "placeholder": {
+        "en": "07:00-09:30",
+        "fr": "07:00-09:30"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_2_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "stop_3_section",
+      "type": "section",
+      "label": {
+        "en": "Stop 3 (optional)",
+        "fr": "Arrêt 3 (optionnel)"
+      },
+      "description": {
+        "en": "Same fields as stop 1, for example the way back. Leave empty when unused.",
+        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile."
+      }
+    },
+    {
+      "key": "stop_3",
+      "type": "string",
+      "label": {
+        "en": "Stop",
+        "fr": "Arrêt"
+      },
+      "placeholder": {
+        "en": "Gare du Nord",
+        "fr": "Gare du Nord"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_3_line",
+      "type": "string",
+      "label": {
+        "en": "Line",
+        "fr": "Ligne"
+      },
+      "description": {
+        "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+      },
+      "placeholder": {
+        "en": "RER D",
+        "fr": "RER D"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_3_direction",
+      "type": "string",
+      "label": {
+        "en": "Direction",
+        "fr": "Direction"
+      },
+      "description": {
+        "en": "Words of the destination. Empty: every direction.",
+        "fr": "Des mots de la destination. Vide : toutes les directions."
+      },
+      "placeholder": {
+        "en": "Melun",
+        "fr": "Melun"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_3_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+      },
+      "placeholder": {
+        "en": "07:00-09:30",
+        "fr": "07:00-09:30"
+      },
+      "required": false
+    },
+    {
+      "key": "stop_3_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "lines_section",
+      "type": "section",
+      "label": {
+        "en": "Traffic",
+        "fr": "Info trafic"
+      },
+      "description": {
+        "en": "The lines whose traffic you follow: a device per line (normal, disrupted, interrupted), scenes when a disruption starts or ends, and a widget. The whole network is read in one request every few minutes.",
+        "fr": "Les lignes dont vous suivez le trafic : un appareil par ligne (normal, perturbé, interrompu), des scènes quand une perturbation commence ou se termine, et un widget. Tout le réseau est lu en une requête toutes les quelques minutes."
+      }
+    },
+    {
+      "key": "lines",
+      "type": "string",
+      "label": {
+        "en": "Followed lines",
+        "fr": "Lignes suivies"
+      },
+      "description": {
+        "en": "Up to 6, separated by commas.",
+        "fr": "Jusqu’à 6, séparées par des virgules."
+      },
+      "placeholder": {
+        "en": "RER B, Transilien P, Métro 13",
+        "fr": "RER B, Transilien P, Métro 13"
+      },
+      "required": false
+    },
+    {
+      "key": "settings_section",
+      "type": "section",
+      "label": {
+        "en": "Settings",
+        "fr": "Réglages"
+      },
+      "description": {
+        "en": "With the default values, a stop read all day costs about 600 requests a day, a stop with a 2-hour window on weekdays about 65. When the stops would need more than the daily quota, the integration reads them less often by itself.",
+        "fr": "Avec les valeurs par défaut, un arrêt lu toute la journée coûte environ 600 requêtes par jour, un arrêt avec une plage de 2 heures en semaine environ 65. Quand les arrêts demanderaient plus que le quota quotidien, l’intégration les lit moins souvent d’elle-même."
+      }
+    },
+    {
+      "key": "departure_count",
+      "type": "number",
+      "label": {
+        "en": "Departures followed per stop",
+        "fr": "Départs suivis par arrêt"
+      },
+      "description": {
+        "en": "The next departures of each stop, between 1 and 8.",
+        "fr": "Les prochains départs de chaque arrêt, entre 1 et 8."
+      },
+      "min": 1,
+      "max": 8,
+      "default": 4,
+      "required": false
+    },
+    {
+      "key": "delay_threshold",
+      "type": "number",
+      "label": {
+        "en": "Delay threshold (min)",
+        "fr": "Seuil de retard (min)"
+      },
+      "description": {
+        "en": "From how many minutes a train counts as delayed (scenes, disrupted departures, colors).",
+        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, départs perturbés, couleurs)."
+      },
+      "min": 1,
+      "max": 30,
+      "default": 3,
+      "required": false
+    },
+    {
+      "key": "poll_interval",
+      "type": "number",
+      "label": {
+        "en": "Departures refresh (min)",
+        "fr": "Rafraîchissement des départs (min)"
+      },
+      "description": {
+        "en": "Within the travel window (all day without one), between 1 and 30 minutes.",
+        "fr": "Dans la plage horaire (toute la journée sans plage), entre 1 et 30 minutes."
+      },
+      "min": 1,
+      "max": 30,
+      "default": 2,
+      "required": false
+    },
+    {
+      "key": "traffic_interval",
+      "type": "number",
+      "label": {
+        "en": "Traffic refresh (min)",
+        "fr": "Rafraîchissement du trafic (min)"
+      },
+      "description": {
+        "en": "Between 2 and 60 minutes.",
+        "fr": "Entre 2 et 60 minutes."
+      },
+      "min": 2,
+      "max": 60,
+      "default": 5,
+      "required": false
+    },
+    {
+      "key": "departures_quota",
+      "type": "number",
+      "label": {
+        "en": "Daily quota of departures",
+        "fr": "Quota quotidien des départs"
+      },
+      "description": {
+        "en": "The daily quota of the \"Prochains passages (requête unitaire)\" API on your account: 1 000 for a new one. Raise it here after asking PRIM for more (free).",
+        "fr": "Le quota quotidien de l’API « Prochains passages (requête unitaire) » de votre compte : 1 000 pour un nouveau compte. Augmentez-le ici après en avoir demandé davantage à PRIM (gratuit)."
+      },
+      "min": 100,
+      "max": 1000000,
+      "default": 1000,
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion"
+      },
+      "timeout_seconds": 60
+    },
+    {
+      "key": "search_stop",
+      "label": {
+        "en": "Find a stop",
+        "fr": "Chercher un arrêt"
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "query",
+          "type": "string",
+          "label": {
+            "en": "Stop name",
+            "fr": "Nom de l’arrêt"
+          },
+          "placeholder": {
+            "en": "Massy",
+            "fr": "Massy"
+          },
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "search_line",
+      "label": {
+        "en": "Find a line",
+        "fr": "Chercher une ligne"
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "query",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          },
+          "placeholder": {
+            "en": "Bus 91",
+            "fr": "Bus 91"
+          },
+          "required": true
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "departure_delayed",
+      "label": {
+        "en": "IDFM: train delayed",
+        "fr": "IDFM : train en retard"
+      },
+      "description": {
+        "en": "A followed train becomes late (from the delay threshold), or later still: 15 min, then 30 min. Trains with a timetable only (RER, Transilien).",
+        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min. Trains avec horaire seulement (RER, Transilien)."
+      },
+      "fields": [
+        {
+          "key": "stop",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          },
+          "description": {
+            "en": "A stop device of the integration. Leave empty for any stop.",
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+          },
+          "required": false
+        },
+        {
+          "key": "delay_level",
+          "type": "multi_select",
+          "label": {
+            "en": "Delay",
+            "fr": "Retard"
+          },
+          "description": {
+            "en": "Leave empty for any delay.",
+            "fr": "Laissez vide pour tous les retards."
+          },
+          "options": [
+            {
+              "value": "minor",
+              "label": {
+                "en": "Under 15 min",
+                "fr": "Moins de 15 min"
+              }
+            },
+            {
+              "value": "major",
+              "label": {
+                "en": "15 to 29 min",
+                "fr": "15 à 29 min"
+              }
+            },
+            {
+              "value": "severe",
+              "label": {
+                "en": "30 min and more",
+                "fr": "30 min et plus"
+              }
+            }
+          ],
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "stop_name",
+          "type": "string",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          }
+        },
+        {
+          "key": "line",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "destination",
+          "type": "string",
+          "label": {
+            "en": "Destination",
+            "fr": "Destination"
+          }
+        },
+        {
+          "key": "mission",
+          "type": "string",
+          "label": {
+            "en": "Mission (RER, Transilien)",
+            "fr": "Mission (RER, Transilien)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Voie"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "departure_cancelled",
+      "label": {
+        "en": "IDFM: departure cancelled",
+        "fr": "IDFM : départ supprimé"
+      },
+      "description": {
+        "en": "A followed departure is cancelled.",
+        "fr": "Un départ suivi est supprimé."
+      },
+      "fields": [
+        {
+          "key": "stop",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          },
+          "description": {
+            "en": "A stop device of the integration. Leave empty for any stop.",
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "stop_name",
+          "type": "string",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          }
+        },
+        {
+          "key": "line",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "destination",
+          "type": "string",
+          "label": {
+            "en": "Destination",
+            "fr": "Destination"
+          }
+        },
+        {
+          "key": "mission",
+          "type": "string",
+          "label": {
+            "en": "Mission (RER, Transilien)",
+            "fr": "Mission (RER, Transilien)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Voie"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "departure_soon",
+      "label": {
+        "en": "IDFM: departure soon",
+        "fr": "IDFM : départ imminent"
+      },
+      "description": {
+        "en": "A followed departure leaves in N minutes, counted on its real-time departure.",
+        "fr": "Un départ suivi part dans N minutes, comptées sur son départ en temps réel."
+      },
+      "fields": [
+        {
+          "key": "stop",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          },
+          "description": {
+            "en": "A stop device of the integration. Leave empty for any stop.",
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+          },
+          "required": false
+        },
+        {
+          "key": "minutes",
+          "type": "select",
+          "label": {
+            "en": "Leaves in",
+            "fr": "Départ dans"
+          },
+          "options": [
+            {
+              "value": "2",
+              "label": {
+                "en": "2 min",
+                "fr": "2 min"
+              }
+            },
+            {
+              "value": "5",
+              "label": {
+                "en": "5 min",
+                "fr": "5 min"
+              }
+            },
+            {
+              "value": "10",
+              "label": {
+                "en": "10 min",
+                "fr": "10 min"
+              }
+            },
+            {
+              "value": "15",
+              "label": {
+                "en": "15 min",
+                "fr": "15 min"
+              }
+            },
+            {
+              "value": "20",
+              "label": {
+                "en": "20 min",
+                "fr": "20 min"
+              }
+            },
+            {
+              "value": "30",
+              "label": {
+                "en": "30 min",
+                "fr": "30 min"
+              }
+            }
+          ],
+          "required": true
+        }
+      ],
+      "variables": [
+        {
+          "key": "stop_name",
+          "type": "string",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          }
+        },
+        {
+          "key": "line",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "destination",
+          "type": "string",
+          "label": {
+            "en": "Destination",
+            "fr": "Destination"
+          }
+        },
+        {
+          "key": "mission",
+          "type": "string",
+          "label": {
+            "en": "Mission (RER, Transilien)",
+            "fr": "Mission (RER, Transilien)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Voie"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "line_disrupted",
+      "label": {
+        "en": "IDFM: line disrupted",
+        "fr": "IDFM : ligne perturbée"
+      },
+      "description": {
+        "en": "A new disruption applies to a followed line (information messages left out).",
+        "fr": "Une nouvelle perturbation touche une ligne suivie (messages d’information exclus)."
+      },
+      "fields": [
+        {
+          "key": "line",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          },
+          "description": {
+            "en": "A line device of the integration. Leave empty for any line.",
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes."
+          },
+          "required": false
+        },
+        {
+          "key": "severity",
+          "type": "multi_select",
+          "label": {
+            "en": "Severity",
+            "fr": "Gravité"
+          },
+          "description": {
+            "en": "Leave empty for both.",
+            "fr": "Laissez vide pour les deux."
+          },
+          "options": [
+            {
+              "value": "blocking",
+              "label": {
+                "en": "Interrupted",
+                "fr": "Interrompu"
+              }
+            },
+            {
+              "value": "disrupted",
+              "label": {
+                "en": "Disrupted",
+                "fr": "Perturbé"
+              }
+            }
+          ],
+          "required": false
+        },
+        {
+          "key": "cause",
+          "type": "multi_select",
+          "label": {
+            "en": "Cause",
+            "fr": "Cause"
+          },
+          "description": {
+            "en": "Leave empty for both.",
+            "fr": "Laissez vide pour les deux."
+          },
+          "options": [
+            {
+              "value": "incident",
+              "label": {
+                "en": "Incident",
+                "fr": "Incident"
+              }
+            },
+            {
+              "value": "works",
+              "label": {
+                "en": "Works",
+                "fr": "Travaux"
+              }
+            }
+          ],
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "line_name",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "title",
+          "type": "string",
+          "label": {
+            "en": "Title",
+            "fr": "Titre"
+          }
+        },
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Message",
+            "fr": "Message"
+          }
+        },
+        {
+          "key": "begin",
+          "type": "string",
+          "label": {
+            "en": "Start (YYYY-MM-DD HH:MM)",
+            "fr": "Début (AAAA-MM-JJ HH:MM)"
+          }
+        },
+        {
+          "key": "end",
+          "type": "string",
+          "label": {
+            "en": "End (YYYY-MM-DD HH:MM)",
+            "fr": "Fin (AAAA-MM-JJ HH:MM)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "line_restored",
+      "label": {
+        "en": "IDFM: traffic back to normal",
+        "fr": "IDFM : retour à la normale"
+      },
+      "description": {
+        "en": "A followed line that was disrupted runs normally again.",
+        "fr": "Une ligne suivie qui était perturbée circule de nouveau normalement."
+      },
+      "fields": [
+        {
+          "key": "line",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          },
+          "description": {
+            "en": "A line device of the integration. Leave empty for any line.",
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "line_name",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "get_next_departures",
+      "label": {
+        "en": "IDFM: next departures",
+        "fr": "IDFM : prochains départs"
+      },
+      "description": {
+        "en": "The next departure of a stop, its delay or cancellation, and a sentence for a message.",
+        "fr": "Le prochain départ d’un arrêt, son retard ou sa suppression, et une phrase pour un message."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "stop",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          },
+          "description": {
+            "en": "A stop device of the integration. Leave empty for the first stop.",
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt."
+          },
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "stop_name",
+          "type": "string",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          }
+        },
+        {
+          "key": "found",
+          "type": "boolean",
+          "label": {
+            "en": "Departure found",
+            "fr": "Départ trouvé"
+          }
+        },
+        {
+          "key": "line",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "destination",
+          "type": "string",
+          "label": {
+            "en": "Destination",
+            "fr": "Destination"
+          }
+        },
+        {
+          "key": "mission",
+          "type": "string",
+          "label": {
+            "en": "Mission",
+            "fr": "Mission"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "minutes_until_departure",
+          "type": "number",
+          "label": {
+            "en": "Minutes until departure",
+            "fr": "Minutes avant le départ"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Status (on_time, delayed, cancelled)",
+            "fr": "État (on_time, delayed, cancelled)"
+          }
+        },
+        {
+          "key": "cancelled",
+          "type": "boolean",
+          "label": {
+            "en": "Cancelled",
+            "fr": "Supprimé"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Voie"
+          }
+        },
+        {
+          "key": "disrupted_count",
+          "type": "number",
+          "label": {
+            "en": "Disrupted departures",
+            "fr": "Départs perturbés"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_line_traffic",
+      "label": {
+        "en": "IDFM: line traffic",
+        "fr": "IDFM : trafic d’une ligne"
+      },
+      "description": {
+        "en": "The state of a followed line, its main disruption and a sentence for a message.",
+        "fr": "L’état d’une ligne suivie, sa principale perturbation et une phrase pour un message."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "line",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          },
+          "description": {
+            "en": "A line device of the integration. Leave empty for the first line.",
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour la première ligne."
+          },
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "line_name",
+          "type": "string",
+          "label": {
+            "en": "Line",
+            "fr": "Ligne"
+          }
+        },
+        {
+          "key": "state",
+          "type": "string",
+          "label": {
+            "en": "State (normal, disrupted, blocked)",
+            "fr": "État (normal, disrupted, blocked)"
+          }
+        },
+        {
+          "key": "disrupted",
+          "type": "boolean",
+          "label": {
+            "en": "Disrupted",
+            "fr": "Perturbée"
+          }
+        },
+        {
+          "key": "disruption_count",
+          "type": "number",
+          "label": {
+            "en": "Current disruptions",
+            "fr": "Perturbations en cours"
+          }
+        },
+        {
+          "key": "title",
+          "type": "string",
+          "label": {
+            "en": "Title",
+            "fr": "Titre"
+          }
+        },
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Message",
+            "fr": "Message"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "departures",
+      "label": {
+        "en": "IDFM departures",
+        "fr": "Départs IDFM"
+      },
+      "description": {
+        "en": "The next departures of a stop, in real time.",
+        "fr": "Les prochains départs d’un arrêt, en temps réel."
+      },
+      "icon": "clock",
+      "settings": [
+        {
+          "key": "stop",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Stop",
+            "fr": "Arrêt"
+          },
+          "description": {
+            "en": "A stop device of the integration. Leave empty for the first stop.",
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt."
+          },
+          "required": false
+        },
+        {
+          "key": "stop_name",
+          "type": "string",
+          "label": {
+            "en": "Other stop",
+            "fr": "Autre arrêt"
+          },
+          "description": {
+            "en": "A stop name or number, to show a stop that is not configured (it spends the departures quota).",
+            "fr": "Un nom ou numéro d’arrêt, pour afficher un arrêt non configuré (il consomme le quota des départs)."
+          },
+          "placeholder": {
+            "en": "Châtelet",
+            "fr": "Châtelet"
+          },
+          "required": false
+        },
+        {
+          "key": "line",
+          "type": "string",
+          "label": {
+            "en": "Line of the other stop",
+            "fr": "Ligne de l’autre arrêt"
+          },
+          "placeholder": {
+            "en": "Métro 1",
+            "fr": "Métro 1"
+          },
+          "required": false
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": {
+            "en": "Departures shown",
+            "fr": "Départs affichés"
+          },
+          "min": 1,
+          "max": 8,
+          "default": 6,
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "traffic",
+      "label": {
+        "en": "IDFM traffic",
+        "fr": "Trafic IDFM"
+      },
+      "description": {
+        "en": "The state of lines and their disruptions.",
+        "fr": "L’état des lignes et leurs perturbations."
+      },
+      "icon": "alert-triangle",
+      "settings": [
+        {
+          "key": "lines",
+          "type": "string",
+          "label": {
+            "en": "Lines",
+            "fr": "Lignes"
+          },
+          "description": {
+            "en": "Empty: the followed lines.",
+            "fr": "Vide : les lignes suivies."
+          },
+          "placeholder": {
+            "en": "RER A, Métro 1",
+            "fr": "RER A, Métro 1"
+          },
+          "required": false
+        }
+      ]
+    }
+  ]
+}
