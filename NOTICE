@@ -1,0 +1,12 @@
+Gladys Île-de-France Mobilités integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Île-de-France Mobilités, PRIM, RATP, SNCF and Transilien are trademarks of
+their respective owners. This community integration is not affiliated with,
+endorsed or sponsored by any of them.
+
+Data: Île-de-France Mobilités. The reference data of lines and stops are read
+from data.iledefrance-mobilites.fr (ODbL and Licence Ouverte v2.0), the
+real-time data from PRIM under its terms of use. Nothing is redistributed.

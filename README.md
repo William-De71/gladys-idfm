@@ -1,17 +1,37 @@
 # Gladys Île-de-France Mobilités
 
+**English** · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md)
+
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/William-De71/gladys-idfm?sort=semver)](https://github.com/William-De71/gladys-idfm/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+
 External [Gladys Assistant](https://gladysassistant.com) integration for the **public transport of the Paris region**:
 the next departures of your stops in real time — RER, Transilien, metro, tram, bus — with delays and cancellations,
 and the **traffic** of your lines (incidents, works), as devices, **scene triggers**, **scene actions** and
-**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.14.
+**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.15.
 
 Data: [PRIM](https://prim.iledefrance-mobilites.fr), the open data platform of Île-de-France Mobilités (free key,
 1 000 requests a day per API on a new account), and the open reference data of
 [data.iledefrance-mobilites.fr](https://data.iledefrance-mobilites.fr) (no key) to find lines and stops.
 
-User documentation: [English](docs/en.md) · [Français](docs/fr.md).
+User documentation: [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch](docs/de.md) · [Español](docs/es.md).
 
 > Community integration, not affiliated with or endorsed by Île-de-France Mobilités, SNCF or RATP.
+
+## Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [How it works](#how-it-works)
+- [Development](#development)
+- [Release and commit convention](#release-and-commit-convention)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
@@ -64,6 +84,80 @@ to the next. A disruption fires once (kept two days); the first read of a line i
 | `departures` | "leaves in" tile, then the next departures with an in N min / +N min / cancelled / at the stop badge; a followed or typed stop |
 | `traffic`    | a status row per line (normal, disrupted, interrupted), then the current and next-24 h disruptions; a tap opens the message    |
 
+### Transport badge
+
+On the Devices screen, each stop and line device shows how it is reached (`publishTransports`): **cloud** while
+its last read worked (the departures of the stop, the traffic for a line), **unreachable** when it failed (API
+down, key refused), and **cloud, degraded** with the reason while the reads are paused by the daily quota or by the
+integration slowing down before it. Sent only when it changes.
+
+### Languages
+
+English, French, German and Spanish: manifest, runtime messages, widgets, scene summaries and user docs. Gladys
+gives the language to the widgets only; device names and scene texts use the **Language of the texts** setting
+(`auto` = the language of the last widget request). Stop names, line names and the disruption messages come from
+Île-de-France Mobilités, in French.
+
+## Architecture
+
+![Architecture: the PRIM API and the IDFM open data are read by the integration container, which publishes devices, states, scene events and widgets to Gladys (illustration)](docs/assets/architecture.svg)
+
+```mermaid
+flowchart LR
+  P[PRIM API] -- "stop monitoring" --> W[watcher]
+  P -- "disruptions" --> TR[traffic]
+  O[IDFM open data] -- "lines, stops" --> R[resolvers]
+  R --> W
+  W --> T[tracker]
+  T -- "publishSceneEvent" --> G[(Gladys)]
+  TR -- "publishSceneEvent" --> G
+  W -- "publishStates, publishTransports" --> G
+  TR -- "publishStates, publishTransports" --> G
+  G -- "widget / scene action requests" --> I[handlers]
+  I -- "reads (cached)" --> P
+  I -- "contents, outputs" --> G
+```
+
+From the Discover tab to a state and a scene:
+
+```mermaid
+sequenceDiagram
+  participant U as User
+  participant G as Gladys
+  participant I as Integration
+  participant O as IDFM open data
+  participant P as PRIM API
+  U->>G: Configuration (key, stops, lines) and save
+  G->>I: config updated
+  I->>O: lines and stops (once, cached)
+  I->>G: publishDiscoveredDevices
+  U->>G: Discover tab: add the devices
+  G->>I: device created
+  I->>G: publishStates (last read), publishTransports, widget refresh
+  loop every poll_interval around the travel window
+    I->>P: stop monitoring
+    I->>G: publishStates, publishSceneEvent (delayed, cancelled)
+  end
+  loop every traffic_interval
+    I->>P: disruptions (whole network)
+    I->>G: publishStates (on change), publishSceneEvent (disrupted, restored)
+  end
+  loop every 30 s
+    I->>G: publishSceneEvent (departure_soon)
+  end
+```
+
+The integration is cloud-only (`transports: ["cloud"]`): it talks to the PRIM and open data web APIs and nothing
+on the local network.
+
+## Installation
+
+From Gladys: **Integrations → store → Île-de-France Mobilités → Install**. Then follow the
+[user documentation](docs/en.md): PRIM API key, stops, lines, **Test the connection**, Discover tab.
+
+Docker image: `ghcr.io/william-de71/gladys-idfm`, multi-arch (amd64/arm64), non-root, read-only rootfs, writes in
+`/data` only, OCI labels and the manifest as the `io.gladysassistant.manifest` label.
+
 ## Configuration
 
 | Key                  | Type           | Notes                                                                                  |
@@ -80,6 +174,7 @@ to the next. A disruption fires once (kept two days); the first read of a line i
 | `poll_interval`      | `number`       | minutes between two reads of a stop, 1–30, default 2                                   |
 | `traffic_interval`   | `number`       | minutes between two reads of the traffic, 2–60, default 5                              |
 | `departures_quota`   | `number`       | the daily quota of the departures API of the account, default 1 000                    |
+| `language`           | `select`       | language of the device names and scene texts: `auto` (default), `en`, `fr`, `de`, `es` |
 
 Internal key (outside the schema): `last_language`. Manifest actions: `test_connection`, `search_stop` and
 `search_line` (both on the open data: no key, no quota).
@@ -119,24 +214,78 @@ network failures are retried once, then the reads back off up to 30 minutes.
 
 ```bash
 npm install
-npm run lint
 npm run format:check
+npm run lint
 npm test
+npx github:GladysAssistant/integration-store . --skip-image-check
+docker build -t gladys-idfm .
 ```
 
-The tests use answers shaped like the real ones (checked against real 2025–2026 stop-monitoring answers and the
-PRIM documentation) and check every widget content with the SDK `validateWidgetContent`. The manifest is validated
-by the core `validateManifest` (v5.1.1, v5.1.4 and master): `gladys_version` is `>=5.1.1`.
+Node 22 or later. The tests (`node --test`) never touch the network: they use answers shaped like the real ones
+(checked against real 2025–2026 stop-monitoring answers and the PRIM documentation) and check every widget content
+with the SDK `validateWidgetContent`. Beyond the unit tests:
+
+- `test/structure.test.js` compares the device external ids, the feature fields the Discover tab compares and
+  every key of the manifest with `test/fixtures/discovery.baseline.json` (version 1.0.0): existing users never
+  have to recreate a device;
+- `test/i18n.test.js` checks the four languages (manifest, runtime texts, docs, READMEs) and validates the widget
+  contents in each;
+- `test/release.test.js` covers the release script (version, changelog, bump).
+
+`gladys_version` is `>=5.1.1` (widgets, scene triggers and actions, `source: "devices"`).
 
 For development only, `IDFM_PRIM_URL` and `IDFM_OPENDATA_URL` point the clients to other servers and
 `IDFM_DATA_DIR` moves the files of `/data`.
 
-Docker image: `ghcr.io/william-de71/gladys-idfm`, multi-arch (amd64/arm64), non-root, read-only rootfs, writes in
-`/data` only. The package must be public for Gladys to pull it.
+## Release and commit convention
+
+Releases are automatic. Every push to `main` runs the Release workflow:
+
+```mermaid
+flowchart LR
+  P[push to main] --> C[CI: format, lint, tests, store checks, docker build]
+  C --> V{commits since the last tag}
+  V -- "docs, chore, ci, test, refactor, build only" --> N[no release]
+  V -- "feat / fix / perf / breaking" --> B[build and push the image X.Y.Z + latest]
+  B --> K[verify: anonymous pull amd64 + arm64, store validator, topic]
+  K --> R["commit chore(release): X.Y.Z + tag vX.Y.Z (atomic push)"]
+  R --> GR[GitHub Release = CHANGELOG section]
+```
+
+- Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/), in English, written
+  for the user: they become the changelog lines. `feat` → minor, `fix` / `perf` → patch, `!` or `BREAKING
+CHANGE:` → major.
+- `CHANGELOG.md` is generated at the release: never edit it by hand.
+- The image is published and checked **before** the manifest on `main` announces the new version.
+- Manual run (Actions → Release → Run workflow): `release-as` forces a version, `dry-run` only shows the version
+  and the notes.
+- A protected `main` would reject the release commit: allow GitHub Actions to bypass the rule, or use a GitHub
+  App token.
+
+## Troubleshooting
+
+| Symptom                               | Likely cause                                                                                     |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| "The PRIM API key is refused"         | token miscopied, or regenerated since (a new token invalidates the old one)                      |
+| "Not found: …"                        | the name matches no stop or line: use **Find a stop** / **Find a line** and paste the number     |
+| "Daily quota of the PRIM API reached" | PRIM blocked the key until the time shown: add travel windows, slow the refresh, raise the quota |
+| No delay for the metro                | the metro and most buses have no timetable in the real-time data: only the wait is known         |
+| Device names or summaries in English  | set **Language of the texts**, or open an IDFM widget once                                       |
+
+Detailed logs: set the environment variable `DEBUG=gladys-integration-sdk` on the container.
+
+## Contributing
+
+Issues and pull requests are welcome: bug reports with the Gladys version, the integration version and the logs
+([issue templates](.github/ISSUE_TEMPLATE)). Feedback on the
+[Gladys forum thread](https://community.gladysassistant.com/t/integration-externe-ile-de-france-mobilites-rer-transilien-metro-tram-bus/11043)
+too. Security problems: see [SECURITY.md](SECURITY.md).
 
 ## License
 
-Apache-2.0. Data: Île-de-France Mobilités — `referentiel-des-lignes` and `arrets-lignes` under the
+[Apache-2.0](LICENSE) — see [NOTICE](NOTICE).
+
+Data: Île-de-France Mobilités — `referentiel-des-lignes` and `arrets-lignes` under the
 [ODbL](https://doc.transport.data.gouv.fr/le-point-d-acces-national/cadre-juridique/conditions-dutilisation-des-donnees/licence-odbl),
 `zones-d-arrets` and `arrets` under the [Licence Ouverte v2.0](https://www.etalab.gouv.fr/licence-ouverte-open-licence/),
 the real-time APIs under the PRIM terms of use. The integration only reads them, nothing is redistributed.

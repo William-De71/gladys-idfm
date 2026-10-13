@@ -61,6 +61,10 @@ On the **Discovery** tab, each stop shows up as "IDFM – _stop_ (_line_ → _di
 | Line   | **Traffic**              | text: "Normal traffic", "Disrupted: …", "Interrupted: …"                |
 | Line   | **Current disruptions**  | the disruptions applying now (information messages left out)            |
 
+The device names and the scene summaries follow the **Language of the texts** setting: English, French, German, Spanish, or automatic (the language of your dashboard, once an IDFM widget has been displayed).
+
+On the **Devices** screen, the badge of each stop and line says **cloud** while the PRIM API answers, **unreachable** when its last read failed, and turns orange when the reads are paused by the daily quota.
+
 ## Scenes
 
 ### Triggers
@@ -73,7 +77,9 @@ On the **Discovery** tab, each stop shows up as "IDFM – _stop_ (_line_ → _di
 | **IDFM: line disrupted**         | a new disruption applies to a followed line (filters: severity, incident/works)     |
 | **IDFM: traffic back to normal** | a followed line that was disrupted runs normally again                              |
 
-Every event carries a **Summary** variable, a sentence ready to send. An event fires only once per departure or disruption, even after a restart.
+Every event carries a **Summary** variable, a sentence ready to send: "Massy - Palaiseau: the RER B KASE → Aéroport CDG 2 leaves in 15 min, at 07:42 (4 min late)." or "RER B: Interrupted. Trafic interrompu entre Massy et Paris.".
+
+An event fires only once per departure or disruption, even after a restart.
 
 ### Actions
 
@@ -88,6 +94,10 @@ Every event carries a **Summary** variable, a sentence ready to send. An event f
 ## FAQ
 
 **No delay for the metro?** The metro and most buses have no timetable in the real-time data: only the wait is known. The delay and the "train delayed" trigger are for RER, Transilien and timetabled lines.
+
+**The widget shows "Departures of 07:00-09:30 shown from 06:00".** That is expected: outside the travel window, the stop is not read.
+
+**Device names or summaries in English?** Set **Language of the texts** in the settings, or open an IDFM widget once.
 
 **"The PRIM API key is refused".** The token was miscopied or regenerated since: generate a new one and paste it.
 

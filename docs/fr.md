@@ -61,6 +61,10 @@ Dans l'onglet **Découverte**, chaque arrêt apparaît comme « IDFM – _arrêt
 | Ligne    | **Trafic**                 | texte : « Trafic normal », « Perturbé : … », « Interrompu : … »             |
 | Ligne    | **Perturbations en cours** | nombre de perturbations en cours (hors simples informations)                |
 
+Les noms des appareils et les résumés de scène suivent le réglage **Langue des textes** : anglais, français, allemand, espagnol, ou automatique (la langue de votre tableau de bord, dès qu'un widget IDFM a été affiché).
+
+Sur l'écran **Appareils**, le badge de chaque arrêt et de chaque ligne indique **cloud** tant que l'API PRIM répond, **injoignable** quand sa dernière lecture a échoué, et passe à l'orange quand les lectures sont en pause à cause du quota quotidien.
+
 ## Scènes
 
 ### Déclencheurs
@@ -92,6 +96,8 @@ Un événement n'est déclenché qu'une fois par départ ou par perturbation, m�
 **Pas de retard pour le métro ?** Le métro et la plupart des bus n'ont pas d'horaire théorique dans les données temps réel : seul le temps d'attente est connu. Le retard et le déclencheur « train en retard » concernent les RER, Transilien et lignes avec horaire.
 
 **Le widget affiche « Départs de 07:00-09:30 affichés à partir de 06:00 ».** C'est normal : hors de la plage horaire, l'arrêt n'est pas lu.
+
+**Noms d'appareils ou résumés en anglais ?** Réglez **Langue des textes** dans les réglages, ou affichez une fois un widget IDFM.
 
 **« La clé d'API PRIM est refusée ».** Le jeton a été mal copié ou régénéré depuis : générez-en un nouveau et collez-le.
 

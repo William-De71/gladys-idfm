@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" font-family="Helvetica, Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">Architecture of the Île-de-France Mobilités integration</title>
+  <desc id="desc">Diagram: the PRIM API (departures and traffic) and the IDFM open data (lines and stops) are read by the integration container, which publishes devices, states, transport badges, scene events and widget contents to Gladys over its host API and WebSocket.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #4a5568; stroke-width: 1.5; }
+    .inner { fill: #f7fafc; stroke: #a0aec0; stroke-width: 1; }
+    .idfm { fill: #e6f4f1; stroke: #0f7f6f; stroke-width: 1.5; }
+    .gladys { fill: #ebf4ff; stroke: #3b82f6; stroke-width: 1.5; }
+    .h { font-size: 15px; font-weight: bold; fill: #1a202c; }
+    .t { font-size: 12px; fill: #2d3748; }
+    .s { font-size: 11px; fill: #4a5568; }
+    .arrow { stroke: #4a5568; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+  </defs>
+  <rect width="880" height="380" fill="#ffffff"/>
+
+  <rect class="idfm" x="20" y="40" width="190" height="140" rx="10"/>
+  <text class="h" x="115" y="68" text-anchor="middle">PRIM API</text>
+  <text class="t" x="115" y="94" text-anchor="middle">stop monitoring</text>
+  <text class="t" x="115" y="112" text-anchor="middle">(next departures)</text>
+  <text class="t" x="115" y="130" text-anchor="middle">disruptions (traffic)</text>
+  <text class="s" x="115" y="160" text-anchor="middle">free key, 1 000 req./day/API</text>
+
+  <rect class="idfm" x="20" y="210" width="190" height="120" rx="10"/>
+  <text class="h" x="115" y="238" text-anchor="middle">IDFM open data</text>
+  <text class="t" x="115" y="264" text-anchor="middle">lines, stops, stop areas</text>
+  <text class="s" x="115" y="290" text-anchor="middle">no key, no quota</text>
+  <text class="s" x="115" y="308" text-anchor="middle">cached in /data</text>
+
+  <rect class="box" x="250" y="30" width="360" height="320" rx="10"/>
+  <text class="h" x="430" y="56" text-anchor="middle">Integration container (Docker)</text>
+  <rect class="inner" x="270" y="72" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="96" text-anchor="middle">watcher + schedule</text>
+  <text class="s" x="345" y="114" text-anchor="middle">a timer per stop, quotas</text>
+  <rect class="inner" x="440" y="72" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="96" text-anchor="middle">tracker + traffic</text>
+  <text class="s" x="515" y="114" text-anchor="middle">delays, disruptions</text>
+  <rect class="inner" x="270" y="146" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="170" text-anchor="middle">devices</text>
+  <text class="s" x="345" y="188" text-anchor="middle">stops, lines, transport</text>
+  <rect class="inner" x="440" y="146" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="170" text-anchor="middle">widgets</text>
+  <text class="s" x="515" y="188" text-anchor="middle">departures, traffic</text>
+  <rect class="inner" x="270" y="220" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="244" text-anchor="middle">scene actions</text>
+  <text class="s" x="345" y="262" text-anchor="middle">departures, line traffic</text>
+  <rect class="inner" x="440" y="220" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="244" text-anchor="middle">lines + stops</text>
+  <text class="s" x="515" y="262" text-anchor="middle">names → ids</text>
+  <text class="s" x="430" y="320" text-anchor="middle">@gladysassistant/integration-sdk · /data only · non-root</text>
+
+  <rect class="gladys" x="670" y="90" width="190" height="190" rx="10"/>
+  <text class="h" x="765" y="120" text-anchor="middle">Gladys</text>
+  <text class="t" x="765" y="148" text-anchor="middle">Discover → devices</text>
+  <text class="t" x="765" y="170" text-anchor="middle">states and history</text>
+  <text class="t" x="765" y="192" text-anchor="middle">scene triggers</text>
+  <text class="t" x="765" y="214" text-anchor="middle">scene actions</text>
+  <text class="t" x="765" y="236" text-anchor="middle">dashboard widgets</text>
+  <text class="s" x="765" y="262" text-anchor="middle">host API + WebSocket</text>
+
+  <path class="arrow" d="M210,110 L262,100"/>
+  <path class="arrow" d="M210,270 L262,250"/>
+  <text class="s" x="115" y="28" text-anchor="middle">HTTPS, polled</text>
+  <path class="arrow" d="M610,160 L662,160"/>
+  <path class="arrow" d="M662,210 L610,210"/>
+  <text class="s" x="616" y="150">publish</text>
+  <text class="s" x="616" y="232">requests</text>
+</svg>
