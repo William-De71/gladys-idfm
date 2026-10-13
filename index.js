@@ -55,6 +55,7 @@ import {
   buildLineStates,
 } from './src/device.js';
 import { buildDepartureEvent, buildTrafficEvent } from './src/events.js';
+import { transportOf } from './src/transport.js';
 import { isBusy, plannedPollInterval } from './src/schedule.js';
 import { formatTime } from './src/time.js';
 import { t, all, lineStateText, LANGUAGES } from './src/i18n.js';
@@ -102,6 +103,10 @@ let language = 'fr';
 let createdDevices = new Set();
 // Last connection status sent, to send it again only when it changes.
 let lastStatus = null;
+// device external id -> error of its last read (null when it worked), and the
+// transport badge last sent per device external id.
+const outcomes = new Map();
+const transports = new Map();
 // The configured stops and lines, resolved.
 let stops = [];
 let lines = [];
@@ -264,6 +269,55 @@ async function publishStopStates(followed, snapshot) {
 }
 
 /**
+ * @description Publish the transport badge of a device, when it exists and
+ * the badge changed.
+ * @param {string} externalId - The device external id.
+ * @returns {Promise<void>}
+ */
+async function publishTransport(externalId) {
+  if (!createdDevices.has(externalId) || !outcomes.has(externalId)) {
+    return;
+  }
+  const entry = transportOf(externalId, outcomes.get(externalId));
+  const signature = JSON.stringify(entry);
+  if (transports.get(externalId) === signature) {
+    return;
+  }
+  try {
+    await gladys.publishTransports([entry]);
+    transports.set(externalId, signature);
+  } catch (err) {
+    logger.warn(`Unable to publish the transport of ${externalId}: ${err.message}`);
+  }
+}
+
+/**
+ * @description Record the outcome of a read for a stop, and update its badge.
+ * @param {object} followed - The followed stop.
+ * @param {Error|null} error - The error of the read, null when it worked.
+ * @returns {Promise<void>}
+ */
+async function stopOutcome(followed, error) {
+  const externalId = idsOf(gladys, DEVICE_TYPES.STOP, followed.key).device;
+  outcomes.set(externalId, error);
+  await publishTransport(externalId);
+}
+
+/**
+ * @description Record the outcome of a traffic read for every followed line,
+ * and update their badges.
+ * @param {Error|null} error - The error of the read, null when it worked.
+ * @returns {Promise<void>}
+ */
+async function trafficOutcome(error) {
+  for (const line of lines) {
+    const externalId = idsOf(gladys, DEVICE_TYPES.LINE, line.id).device;
+    outcomes.set(externalId, error);
+    await publishTransport(externalId);
+  }
+}
+
+/**
  * @description Publish scene events, one by one.
  * @param {Array<{ key: string, data: object }>} events - The built events.
  * @returns {Promise<void>}
@@ -299,6 +353,7 @@ const watcher = createWatcher({
   getStops: () => (config.apiKey ? stops : []),
   getSettings: () => ({ departureCount: config.departureCount, pollInterval }),
   onRead: async (followed, snapshot, { changed }) => {
+    await stopOutcome(followed, null);
     const now = Date.now();
     await publishDepartureEvents(
       followed,
@@ -318,7 +373,8 @@ const watcher = createWatcher({
     }
     await refreshStatus();
   },
-  onError: async () => {
+  onError: async (followed, err) => {
+    await stopOutcome(followed, err);
     await refreshStatus();
   },
   logger,
@@ -358,6 +414,7 @@ function readTrafficNow() {
       try {
         const answer = await prim.disruptions();
         traffic = { answer, readAt: Date.now(), error: null };
+        await trafficOutcome(null);
         await onTrafficRead();
         return traffic;
       } catch (err) {
@@ -365,6 +422,7 @@ function readTrafficNow() {
         if (err.isQuota) {
           trafficQuota.block(err.retryAfter);
         }
+        await trafficOutcome(err);
         throw err;
       } finally {
         trafficPending = null;
@@ -432,6 +490,7 @@ async function trafficTick() {
   }
   if (!trafficQuota.canPoll()) {
     traffic = { ...traffic, error: Object.assign(new Error('quota'), { budget: true }) };
+    await trafficOutcome(traffic.error);
   } else {
     await readTrafficNow().catch((err) => logger.warn(`Traffic: ${err.message}`));
   }
@@ -836,6 +895,8 @@ gladys.onScanRequest(async () => {
 
 gladys.onDeviceCreated(async (device) => {
   await refreshCreatedDevices();
+  transports.delete(device.external_id);
+  await publishTransport(device.external_id);
   const parsed = parseExternalId(device.external_id);
   if (parsed?.type === DEVICE_TYPES.STOP) {
     const followed = stops.find((candidate) => candidate.key === parsed.key);
@@ -920,6 +981,7 @@ gladys.on('connected', async () => {
   await loadConfig();
   await refreshCreatedDevices();
   lastStatus = null;
+  transports.clear();
   watcher.start();
   await applyConfig();
 });

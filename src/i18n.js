@@ -396,6 +396,20 @@ const TEXTS = {
   kindMetro: { en: 'metro', fr: 'métro', de: 'Metro', es: 'metro' },
   kindTram: { en: 'tram', fr: 'tram', de: 'Tram', es: 'tranvía' },
   kindBus: { en: 'bus', fr: 'bus', de: 'Bus', es: 'autobús' },
+
+  // transport badge
+  transportQuota: {
+    en: 'Daily quota of the PRIM API reached: read again later.',
+    fr: 'Quota quotidien de l’API PRIM atteint : nouvelle lecture plus tard.',
+    de: 'Tageskontingent der PRIM-API erreicht: wird später erneut gelesen.',
+    es: 'Cuota diaria de la API de PRIM alcanzada: se volverá a leer más tarde.',
+  },
+  transportBudget: {
+    en: 'Close to the daily quota: read less often for a while.',
+    fr: 'Proche du quota quotidien : lu moins souvent pendant un moment.',
+    de: 'Nahe am Tageskontingent: wird eine Weile seltener gelesen.',
+    es: 'Cerca de la cuota diaria: se lee con menos frecuencia durante un rato.',
+  },
 };
 
 /**
