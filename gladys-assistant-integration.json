@@ -4,7 +4,9 @@
   "name": "Île-de-France Mobilités",
   "description": {
     "en": "RER, Transilien, metro, tram, bus: departures and traffic in real time.",
-    "fr": "RER, Transilien, métro, tram, bus : départs et trafic en temps réel."
+    "fr": "RER, Transilien, métro, tram, bus : départs et trafic en temps réel.",
+    "de": "RER, Transilien, Metro, Tram, Bus: Abfahrten und Verkehr in Echtzeit.",
+    "es": "RER, Transilien, metro, tranvía, autobús: salidas y tráfico en tiempo real."
   },
   "version": "1.0.0",
   "docker_image": "ghcr.io/william-de71/gladys-idfm:1.0.0",
@@ -18,25 +20,33 @@
       "type": "section",
       "label": {
         "en": "PRIM API key",
-        "fr": "Clé d’API PRIM"
+        "fr": "Clé d’API PRIM",
+        "de": "PRIM-API-Schlüssel",
+        "es": "Clave de API de PRIM"
       },
       "description": {
         "en": "The data come from PRIM, the open data platform of Île-de-France Mobilités: real-time departures of RER, Transilien, metro, tram and bus, and the traffic disruptions. The key is free: create an account, then generate a token in \"My authentication tokens\". A new account allows 1 000 requests a day per API; the integration counts them and spaces its reads to stay below.",
-        "fr": "Les données viennent de PRIM, la plateforme de données ouvertes d’Île-de-France Mobilités : prochains passages en temps réel des RER, Transilien, métro, tram et bus, et perturbations du trafic. La clé est gratuite : créez un compte, puis générez un jeton dans « Mes jetons d’authentification ». Un nouveau compte autorise 1 000 requêtes par jour et par API ; l’intégration les compte et espace ses lectures pour rester en dessous."
+        "fr": "Les données viennent de PRIM, la plateforme de données ouvertes d’Île-de-France Mobilités : prochains passages en temps réel des RER, Transilien, métro, tram et bus, et perturbations du trafic. La clé est gratuite : créez un compte, puis générez un jeton dans « Mes jetons d’authentification ». Un nouveau compte autorise 1 000 requêtes par jour et par API ; l’intégration les compte et espace ses lectures pour rester en dessous.",
+        "de": "Die Daten stammen von PRIM, der Open-Data-Plattform von Île-de-France Mobilités: Echtzeit-Abfahrten von RER, Transilien, Metro, Tram und Bus sowie die Verkehrsstörungen. Der Schlüssel ist kostenlos: Erstelle ein Konto und erzeuge dann ein Token unter „Mes jetons d’authentification“. Ein neues Konto erlaubt 1 000 Anfragen pro Tag und API; die Integration zählt sie und verteilt ihre Abfragen, um darunter zu bleiben.",
+        "es": "Los datos proceden de PRIM, la plataforma de datos abiertos de Île-de-France Mobilités: salidas en tiempo real de RER, Transilien, metro, tranvía y autobús, y las incidencias del tráfico. La clave es gratuita: crea una cuenta y genera un token en «Mes jetons d’authentification». Una cuenta nueva permite 1 000 peticiones al día por API; la integración las cuenta y espacia sus lecturas para no superarlas."
       },
       "links": [
         {
           "url": "https://prim.iledefrance-mobilites.fr/fr/aide-et-contact/documentation/donnees-disponibles/api/generer-un-jeton-pour-acceder-aux-api",
           "label": {
             "en": "Get a free API key",
-            "fr": "Obtenir une clé gratuite"
+            "fr": "Obtenir une clé gratuite",
+            "de": "Kostenlosen API-Schlüssel holen",
+            "es": "Obtener una clave gratuita"
           }
         },
         {
           "url": "https://prim.iledefrance-mobilites.fr/fr/ma-consommation-api",
           "label": {
             "en": "My quotas (raise them)",
-            "fr": "Mes quotas (les augmenter)"
+            "fr": "Mes quotas (les augmenter)",
+            "de": "Meine Kontingente (erhöhen)",
+            "es": "Mis cuotas (aumentarlas)"
           }
         }
       ]
@@ -46,11 +56,15 @@
       "type": "secret",
       "label": {
         "en": "API key",
-        "fr": "Clé d’API"
+        "fr": "Clé d’API",
+        "de": "API-Schlüssel",
+        "es": "Clave de API"
       },
       "description": {
         "en": "The token generated on PRIM (shown only once).",
-        "fr": "Le jeton généré sur PRIM (affiché une seule fois)."
+        "fr": "Le jeton généré sur PRIM (affiché une seule fois).",
+        "de": "Das auf PRIM erzeugte Token (wird nur einmal angezeigt).",
+        "es": "El token generado en PRIM (solo se muestra una vez)."
       },
       "required": true
     },
@@ -59,11 +73,15 @@
       "type": "section",
       "label": {
         "en": "Stop 1",
-        "fr": "Arrêt 1"
+        "fr": "Arrêt 1",
+        "de": "Haltestelle 1",
+        "es": "Parada 1"
       },
       "description": {
         "en": "The stop where you take your train, metro, tram or bus, and its line: the departures are read in real time. A stop name (\"Massy - Palaiseau\") or its number given by the \"Find a stop\" button. With a line, the name is searched among its stops. The direction keeps only the departures whose destination contains these words (\"Robinson\", \"Saint-Rémy | Massy\"). The travel window saves the quota: the stop is then read only from an hour before it to its end.",
-        "fr": "L’arrêt où vous prenez votre train, métro, tram ou bus, et sa ligne : les départs sont lus en temps réel. Un nom d’arrêt (« Massy - Palaiseau ») ou son numéro donné par le bouton « Chercher un arrêt ». Avec une ligne, le nom est cherché parmi ses arrêts. La direction ne garde que les départs dont la destination contient ces mots (« Robinson », « Saint-Rémy | Massy »). La plage horaire économise le quota : l’arrêt n’est alors lu que d’une heure avant jusqu’à sa fin."
+        "fr": "L’arrêt où vous prenez votre train, métro, tram ou bus, et sa ligne : les départs sont lus en temps réel. Un nom d’arrêt (« Massy - Palaiseau ») ou son numéro donné par le bouton « Chercher un arrêt ». Avec une ligne, le nom est cherché parmi ses arrêts. La direction ne garde que les départs dont la destination contient ces mots (« Robinson », « Saint-Rémy | Massy »). La plage horaire économise le quota : l’arrêt n’est alors lu que d’une heure avant jusqu’à sa fin.",
+        "de": "Die Haltestelle, an der du in Zug, Metro, Tram oder Bus einsteigst, und ihre Linie: Die Abfahrten werden in Echtzeit gelesen. Ein Haltestellenname („Massy - Palaiseau“) oder ihre Nummer aus der Schaltfläche „Haltestelle suchen“. Mit einer Linie wird der Name unter ihren Haltestellen gesucht. Die Richtung behält nur die Abfahrten, deren Ziel diese Wörter enthält („Robinson“, „Saint-Rémy | Massy“). Das Zeitfenster spart Kontingent: Die Haltestelle wird dann nur ab einer Stunde davor bis zu seinem Ende gelesen.",
+        "es": "La parada donde tomas el tren, metro, tranvía o autobús, y su línea: las salidas se leen en tiempo real. Un nombre de parada («Massy - Palaiseau») o su número, dado por el botón «Buscar una parada». Con una línea, el nombre se busca entre sus paradas. La dirección solo conserva las salidas cuyo destino contiene estas palabras («Robinson», «Saint-Rémy | Massy»). La franja horaria ahorra cuota: la parada solo se lee desde una hora antes hasta su final."
       }
     },
     {
@@ -71,11 +89,15 @@
       "type": "string",
       "label": {
         "en": "Stop",
-        "fr": "Arrêt"
+        "fr": "Arrêt",
+        "de": "Haltestelle",
+        "es": "Parada"
       },
       "placeholder": {
         "en": "Massy - Palaiseau",
-        "fr": "Massy - Palaiseau"
+        "fr": "Massy - Palaiseau",
+        "de": "Massy - Palaiseau",
+        "es": "Massy - Palaiseau"
       },
       "required": false
     },
@@ -84,15 +106,21 @@
       "type": "string",
       "label": {
         "en": "Line",
-        "fr": "Ligne"
+        "fr": "Ligne",
+        "de": "Linie",
+        "es": "Línea"
       },
       "description": {
         "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
-        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt.",
+        "de": "RER B, Transilien P, Métro 13, T3a, Bus 91 … Leer: alle Linien der Haltestelle.",
+        "es": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vacío: todas las líneas de la parada."
       },
       "placeholder": {
         "en": "RER B",
-        "fr": "RER B"
+        "fr": "RER B",
+        "de": "RER B",
+        "es": "RER B"
       },
       "required": false
     },
@@ -101,15 +129,21 @@
       "type": "string",
       "label": {
         "en": "Direction",
-        "fr": "Direction"
+        "fr": "Direction",
+        "de": "Richtung",
+        "es": "Dirección"
       },
       "description": {
         "en": "Words of the destination. Empty: every direction.",
-        "fr": "Des mots de la destination. Vide : toutes les directions."
+        "fr": "Des mots de la destination. Vide : toutes les directions.",
+        "de": "Wörter des Ziels. Leer: alle Richtungen.",
+        "es": "Palabras del destino. Vacío: todas las direcciones."
       },
       "placeholder": {
         "en": "Paris",
-        "fr": "Paris"
+        "fr": "Paris",
+        "de": "Paris",
+        "es": "Paris"
       },
       "required": false
     },
@@ -118,15 +152,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: todo el día."
       },
       "placeholder": {
         "en": "07:00-09:30",
-        "fr": "07:00-09:30"
+        "fr": "07:00-09:30",
+        "de": "07:00-09:30",
+        "es": "07:00-09:30"
       },
       "required": false
     },
@@ -135,60 +175,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -199,11 +257,15 @@
       "type": "section",
       "label": {
         "en": "Stop 2 (optional)",
-        "fr": "Arrêt 2 (optionnel)"
+        "fr": "Arrêt 2 (optionnel)",
+        "de": "Haltestelle 2 (optional)",
+        "es": "Parada 2 (opcional)"
       },
       "description": {
         "en": "Same fields as stop 1, for example the way back. Leave empty when unused.",
-        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile."
+        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile.",
+        "de": "Dieselben Felder wie bei Haltestelle 1, zum Beispiel für die Rückfahrt. Leer lassen, wenn nicht benötigt.",
+        "es": "Los mismos campos que la parada 1, por ejemplo para la vuelta. Déjalo vacío si no lo usas."
       }
     },
     {
@@ -211,11 +273,15 @@
       "type": "string",
       "label": {
         "en": "Stop",
-        "fr": "Arrêt"
+        "fr": "Arrêt",
+        "de": "Haltestelle",
+        "es": "Parada"
       },
       "placeholder": {
         "en": "Châtelet",
-        "fr": "Châtelet"
+        "fr": "Châtelet",
+        "de": "Châtelet",
+        "es": "Châtelet"
       },
       "required": false
     },
@@ -224,15 +290,21 @@
       "type": "string",
       "label": {
         "en": "Line",
-        "fr": "Ligne"
+        "fr": "Ligne",
+        "de": "Linie",
+        "es": "Línea"
       },
       "description": {
         "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
-        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt.",
+        "de": "RER B, Transilien P, Métro 13, T3a, Bus 91 … Leer: alle Linien der Haltestelle.",
+        "es": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vacío: todas las líneas de la parada."
       },
       "placeholder": {
         "en": "Métro 14",
-        "fr": "Métro 14"
+        "fr": "Métro 14",
+        "de": "Métro 14",
+        "es": "Métro 14"
       },
       "required": false
     },
@@ -241,15 +313,21 @@
       "type": "string",
       "label": {
         "en": "Direction",
-        "fr": "Direction"
+        "fr": "Direction",
+        "de": "Richtung",
+        "es": "Dirección"
       },
       "description": {
         "en": "Words of the destination. Empty: every direction.",
-        "fr": "Des mots de la destination. Vide : toutes les directions."
+        "fr": "Des mots de la destination. Vide : toutes les directions.",
+        "de": "Wörter des Ziels. Leer: alle Richtungen.",
+        "es": "Palabras del destino. Vacío: todas las direcciones."
       },
       "placeholder": {
         "en": "Saint-Denis",
-        "fr": "Saint-Denis"
+        "fr": "Saint-Denis",
+        "de": "Saint-Denis",
+        "es": "Saint-Denis"
       },
       "required": false
     },
@@ -258,15 +336,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: todo el día."
       },
       "placeholder": {
         "en": "07:00-09:30",
-        "fr": "07:00-09:30"
+        "fr": "07:00-09:30",
+        "de": "07:00-09:30",
+        "es": "07:00-09:30"
       },
       "required": false
     },
@@ -275,60 +359,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -339,11 +441,15 @@
       "type": "section",
       "label": {
         "en": "Stop 3 (optional)",
-        "fr": "Arrêt 3 (optionnel)"
+        "fr": "Arrêt 3 (optionnel)",
+        "de": "Haltestelle 3 (optional)",
+        "es": "Parada 3 (opcional)"
       },
       "description": {
         "en": "Same fields as stop 1, for example the way back. Leave empty when unused.",
-        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile."
+        "fr": "Mêmes champs que l’arrêt 1, par exemple le retour. Laissez vide si inutile.",
+        "de": "Dieselben Felder wie bei Haltestelle 1, zum Beispiel für die Rückfahrt. Leer lassen, wenn nicht benötigt.",
+        "es": "Los mismos campos que la parada 1, por ejemplo para la vuelta. Déjalo vacío si no lo usas."
       }
     },
     {
@@ -351,11 +457,15 @@
       "type": "string",
       "label": {
         "en": "Stop",
-        "fr": "Arrêt"
+        "fr": "Arrêt",
+        "de": "Haltestelle",
+        "es": "Parada"
       },
       "placeholder": {
         "en": "Gare du Nord",
-        "fr": "Gare du Nord"
+        "fr": "Gare du Nord",
+        "de": "Gare du Nord",
+        "es": "Gare du Nord"
       },
       "required": false
     },
@@ -364,15 +474,21 @@
       "type": "string",
       "label": {
         "en": "Line",
-        "fr": "Ligne"
+        "fr": "Ligne",
+        "de": "Linie",
+        "es": "Línea"
       },
       "description": {
         "en": "RER B, Transilien P, Métro 13, T3a, Bus 91… Empty: every line of the stop.",
-        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt."
+        "fr": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vide : toutes les lignes de l’arrêt.",
+        "de": "RER B, Transilien P, Métro 13, T3a, Bus 91 … Leer: alle Linien der Haltestelle.",
+        "es": "RER B, Transilien P, Métro 13, T3a, Bus 91… Vacío: todas las líneas de la parada."
       },
       "placeholder": {
         "en": "RER D",
-        "fr": "RER D"
+        "fr": "RER D",
+        "de": "RER D",
+        "es": "RER D"
       },
       "required": false
     },
@@ -381,15 +497,21 @@
       "type": "string",
       "label": {
         "en": "Direction",
-        "fr": "Direction"
+        "fr": "Direction",
+        "de": "Richtung",
+        "es": "Dirección"
       },
       "description": {
         "en": "Words of the destination. Empty: every direction.",
-        "fr": "Des mots de la destination. Vide : toutes les directions."
+        "fr": "Des mots de la destination. Vide : toutes les directions.",
+        "de": "Wörter des Ziels. Leer: alle Richtungen.",
+        "es": "Palabras del destino. Vacío: todas las direcciones."
       },
       "placeholder": {
         "en": "Melun",
-        "fr": "Melun"
+        "fr": "Melun",
+        "de": "Melun",
+        "es": "Melun"
       },
       "required": false
     },
@@ -398,15 +520,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: todo el día."
       },
       "placeholder": {
         "en": "07:00-09:30",
-        "fr": "07:00-09:30"
+        "fr": "07:00-09:30",
+        "de": "07:00-09:30",
+        "es": "07:00-09:30"
       },
       "required": false
     },
@@ -415,60 +543,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -479,11 +625,15 @@
       "type": "section",
       "label": {
         "en": "Traffic",
-        "fr": "Info trafic"
+        "fr": "Info trafic",
+        "de": "Verkehr",
+        "es": "Tráfico"
       },
       "description": {
         "en": "The lines whose traffic you follow: a device per line (normal, disrupted, interrupted), scenes when a disruption starts or ends, and a widget. The whole network is read in one request every few minutes.",
-        "fr": "Les lignes dont vous suivez le trafic : un appareil par ligne (normal, perturbé, interrompu), des scènes quand une perturbation commence ou se termine, et un widget. Tout le réseau est lu en une requête toutes les quelques minutes."
+        "fr": "Les lignes dont vous suivez le trafic : un appareil par ligne (normal, perturbé, interrompu), des scènes quand une perturbation commence ou se termine, et un widget. Tout le réseau est lu en une requête toutes les quelques minutes.",
+        "de": "Die Linien, deren Verkehr du verfolgst: ein Gerät pro Linie (normal, gestört, unterbrochen), Szenen, wenn eine Störung beginnt oder endet, und ein Widget. Das ganze Netz wird alle paar Minuten mit einer einzigen Anfrage gelesen.",
+        "es": "Las líneas cuyo tráfico sigues: un dispositivo por línea (normal, con incidencias, interrumpida), escenas cuando una incidencia empieza o termina, y un widget. Toda la red se lee con una sola petición cada pocos minutos."
       }
     },
     {
@@ -491,15 +641,21 @@
       "type": "string",
       "label": {
         "en": "Followed lines",
-        "fr": "Lignes suivies"
+        "fr": "Lignes suivies",
+        "de": "Verfolgte Linien",
+        "es": "Líneas seguidas"
       },
       "description": {
         "en": "Up to 6, separated by commas.",
-        "fr": "Jusqu’à 6, séparées par des virgules."
+        "fr": "Jusqu’à 6, séparées par des virgules.",
+        "de": "Bis zu 6, durch Kommas getrennt.",
+        "es": "Hasta 6, separadas por comas."
       },
       "placeholder": {
         "en": "RER B, Transilien P, Métro 13",
-        "fr": "RER B, Transilien P, Métro 13"
+        "fr": "RER B, Transilien P, Métro 13",
+        "de": "RER B, Transilien P, Métro 13",
+        "es": "RER B, Transilien P, Métro 13"
       },
       "required": false
     },
@@ -508,11 +664,15 @@
       "type": "section",
       "label": {
         "en": "Settings",
-        "fr": "Réglages"
+        "fr": "Réglages",
+        "de": "Einstellungen",
+        "es": "Ajustes"
       },
       "description": {
         "en": "With the default values, a stop read all day costs about 600 requests a day, a stop with a 2-hour window on weekdays about 65. When the stops would need more than the daily quota, the integration reads them less often by itself.",
-        "fr": "Avec les valeurs par défaut, un arrêt lu toute la journée coûte environ 600 requêtes par jour, un arrêt avec une plage de 2 heures en semaine environ 65. Quand les arrêts demanderaient plus que le quota quotidien, l’intégration les lit moins souvent d’elle-même."
+        "fr": "Avec les valeurs par défaut, un arrêt lu toute la journée coûte environ 600 requêtes par jour, un arrêt avec une plage de 2 heures en semaine environ 65. Quand les arrêts demanderaient plus que le quota quotidien, l’intégration les lit moins souvent d’elle-même.",
+        "de": "Mit den Standardwerten kostet eine ganztägig gelesene Haltestelle etwa 600 Anfragen pro Tag, eine Haltestelle mit einem 2-stündigen Zeitfenster an Werktagen etwa 65. Würden die Haltestellen mehr als das Tageskontingent brauchen, liest die Integration sie von selbst seltener.",
+        "es": "Con los valores por defecto, una parada leída todo el día cuesta unas 600 peticiones al día, y una parada con una franja de 2 horas entre semana unas 65. Si las paradas necesitaran más que la cuota diaria, la integración las lee con menos frecuencia por sí sola."
       }
     },
     {
@@ -520,11 +680,15 @@
       "type": "number",
       "label": {
         "en": "Departures followed per stop",
-        "fr": "Départs suivis par arrêt"
+        "fr": "Départs suivis par arrêt",
+        "de": "Verfolgte Abfahrten pro Haltestelle",
+        "es": "Salidas seguidas por parada"
       },
       "description": {
         "en": "The next departures of each stop, between 1 and 8.",
-        "fr": "Les prochains départs de chaque arrêt, entre 1 et 8."
+        "fr": "Les prochains départs de chaque arrêt, entre 1 et 8.",
+        "de": "Die nächsten Abfahrten jeder Haltestelle, zwischen 1 und 8.",
+        "es": "Las próximas salidas de cada parada, entre 1 y 8."
       },
       "min": 1,
       "max": 8,
@@ -536,11 +700,15 @@
       "type": "number",
       "label": {
         "en": "Delay threshold (min)",
-        "fr": "Seuil de retard (min)"
+        "fr": "Seuil de retard (min)",
+        "de": "Verspätungsschwelle (min)",
+        "es": "Umbral de retraso (min)"
       },
       "description": {
         "en": "From how many minutes a train counts as delayed (scenes, disrupted departures, colors).",
-        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, départs perturbés, couleurs)."
+        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, départs perturbés, couleurs).",
+        "de": "Ab wie vielen Minuten ein Zug als verspätet gilt (Szenen, gestörte Abfahrten, Farben).",
+        "es": "A partir de cuántos minutos un tren cuenta como retrasado (escenas, salidas con incidencias, colores)."
       },
       "min": 1,
       "max": 30,
@@ -552,11 +720,15 @@
       "type": "number",
       "label": {
         "en": "Departures refresh (min)",
-        "fr": "Rafraîchissement des départs (min)"
+        "fr": "Rafraîchissement des départs (min)",
+        "de": "Aktualisierung der Abfahrten (min)",
+        "es": "Actualización de las salidas (min)"
       },
       "description": {
         "en": "Within the travel window (all day without one), between 1 and 30 minutes.",
-        "fr": "Dans la plage horaire (toute la journée sans plage), entre 1 et 30 minutes."
+        "fr": "Dans la plage horaire (toute la journée sans plage), entre 1 et 30 minutes.",
+        "de": "Innerhalb des Zeitfensters (ohne Zeitfenster den ganzen Tag), zwischen 1 und 30 Minuten.",
+        "es": "Dentro de la franja horaria (todo el día si no hay), entre 1 y 30 minutos."
       },
       "min": 1,
       "max": 30,
@@ -568,11 +740,15 @@
       "type": "number",
       "label": {
         "en": "Traffic refresh (min)",
-        "fr": "Rafraîchissement du trafic (min)"
+        "fr": "Rafraîchissement du trafic (min)",
+        "de": "Aktualisierung des Verkehrs (min)",
+        "es": "Actualización del tráfico (min)"
       },
       "description": {
         "en": "Between 2 and 60 minutes.",
-        "fr": "Entre 2 et 60 minutes."
+        "fr": "Entre 2 et 60 minutes.",
+        "de": "Zwischen 2 und 60 Minuten.",
+        "es": "Entre 2 y 60 minutos."
       },
       "min": 2,
       "max": 60,
@@ -584,15 +760,84 @@
       "type": "number",
       "label": {
         "en": "Daily quota of departures",
-        "fr": "Quota quotidien des départs"
+        "fr": "Quota quotidien des départs",
+        "de": "Tageskontingent der Abfahrten",
+        "es": "Cuota diaria de salidas"
       },
       "description": {
         "en": "The daily quota of the \"Prochains passages (requête unitaire)\" API on your account: 1 000 for a new one. Raise it here after asking PRIM for more (free).",
-        "fr": "Le quota quotidien de l’API « Prochains passages (requête unitaire) » de votre compte : 1 000 pour un nouveau compte. Augmentez-le ici après en avoir demandé davantage à PRIM (gratuit)."
+        "fr": "Le quota quotidien de l’API « Prochains passages (requête unitaire) » de votre compte : 1 000 pour un nouveau compte. Augmentez-le ici après en avoir demandé davantage à PRIM (gratuit).",
+        "de": "Das Tageskontingent der API „Prochains passages (requête unitaire)“ deines Kontos: 1 000 bei einem neuen Konto. Erhöhe es hier, nachdem du bei PRIM mehr beantragt hast (kostenlos).",
+        "es": "La cuota diaria de la API «Prochains passages (requête unitaire)» de tu cuenta: 1 000 en una cuenta nueva. Auméntala aquí después de pedir más a PRIM (gratis)."
       },
       "min": 100,
       "max": 1000000,
       "default": 1000,
+      "required": false
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Device names, scene summaries and outputs. Automatic: the language of your dashboard, once an IDFM widget has been displayed.",
+        "fr": "Noms des appareils, résumés et sorties des scènes. Automatique : la langue de votre tableau de bord, dès qu’un widget IDFM a été affiché.",
+        "de": "Gerätenamen, Zusammenfassungen und Ausgaben der Szenen. Automatisch: die Sprache deines Dashboards, sobald ein IDFM-Widget angezeigt wurde.",
+        "es": "Nombres de los dispositivos, resúmenes y salidas de las escenas. Automático: el idioma de tu panel, en cuanto se haya mostrado un widget de IDFM."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "English",
+            "de": "English",
+            "es": "English"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "Français",
+            "fr": "Français",
+            "de": "Français",
+            "es": "Français"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "Deutsch",
+            "fr": "Deutsch",
+            "de": "Deutsch",
+            "es": "Deutsch"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Español",
+            "fr": "Español",
+            "de": "Español",
+            "es": "Español"
+          }
+        }
+      ],
+      "default": "auto",
       "required": false
     }
   ],
@@ -601,7 +846,9 @@
       "key": "test_connection",
       "label": {
         "en": "Test the connection",
-        "fr": "Tester la connexion"
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
       },
       "timeout_seconds": 60
     },
@@ -609,7 +856,9 @@
       "key": "search_stop",
       "label": {
         "en": "Find a stop",
-        "fr": "Chercher un arrêt"
+        "fr": "Chercher un arrêt",
+        "de": "Haltestelle suchen",
+        "es": "Buscar una parada"
       },
       "timeout_seconds": 20,
       "fields": [
@@ -618,11 +867,15 @@
           "type": "string",
           "label": {
             "en": "Stop name",
-            "fr": "Nom de l’arrêt"
+            "fr": "Nom de l’arrêt",
+            "de": "Name der Haltestelle",
+            "es": "Nombre de la parada"
           },
           "placeholder": {
             "en": "Massy",
-            "fr": "Massy"
+            "fr": "Massy",
+            "de": "Massy",
+            "es": "Massy"
           },
           "required": true
         }
@@ -632,7 +885,9 @@
       "key": "search_line",
       "label": {
         "en": "Find a line",
-        "fr": "Chercher une ligne"
+        "fr": "Chercher une ligne",
+        "de": "Linie suchen",
+        "es": "Buscar una línea"
       },
       "timeout_seconds": 20,
       "fields": [
@@ -641,11 +896,15 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           },
           "placeholder": {
             "en": "Bus 91",
-            "fr": "Bus 91"
+            "fr": "Bus 91",
+            "de": "Bus 91",
+            "es": "Bus 91"
           },
           "required": true
         }
@@ -657,11 +916,15 @@
       "key": "departure_delayed",
       "label": {
         "en": "IDFM: train delayed",
-        "fr": "IDFM : train en retard"
+        "fr": "IDFM : train en retard",
+        "de": "IDFM: Zug verspätet",
+        "es": "IDFM: tren con retraso"
       },
       "description": {
         "en": "A followed train becomes late (from the delay threshold), or later still: 15 min, then 30 min. Trains with a timetable only (RER, Transilien).",
-        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min. Trains avec horaire seulement (RER, Transilien)."
+        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min. Trains avec horaire seulement (RER, Transilien).",
+        "de": "Ein verfolgter Zug verspätet sich (ab der Verspätungsschwelle) oder noch mehr: 15 min, dann 30 min. Nur Züge mit Fahrplan (RER, Transilien).",
+        "es": "Un tren seguido se retrasa (a partir del umbral de retraso), o aún más: 15 min y luego 30 min. Solo trenes con horario (RER, Transilien)."
       },
       "fields": [
         {
@@ -670,11 +933,15 @@
           "source": "devices",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           },
           "description": {
             "en": "A stop device of the integration. Leave empty for any stop.",
-            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts.",
+            "de": "Ein Haltestellen-Gerät der Integration. Leer lassen für alle Haltestellen.",
+            "es": "Un dispositivo de parada de la integración. Déjalo vacío para cualquier parada."
           },
           "required": false
         },
@@ -683,32 +950,42 @@
           "type": "multi_select",
           "label": {
             "en": "Delay",
-            "fr": "Retard"
+            "fr": "Retard",
+            "de": "Verspätung",
+            "es": "Retraso"
           },
           "description": {
             "en": "Leave empty for any delay.",
-            "fr": "Laissez vide pour tous les retards."
+            "fr": "Laissez vide pour tous les retards.",
+            "de": "Leer lassen für jede Verspätung.",
+            "es": "Déjalo vacío para cualquier retraso."
           },
           "options": [
             {
               "value": "minor",
               "label": {
                 "en": "Under 15 min",
-                "fr": "Moins de 15 min"
+                "fr": "Moins de 15 min",
+                "de": "Unter 15 min",
+                "es": "Menos de 15 min"
               }
             },
             {
               "value": "major",
               "label": {
                 "en": "15 to 29 min",
-                "fr": "15 à 29 min"
+                "fr": "15 à 29 min",
+                "de": "15 bis 29 min",
+                "es": "De 15 a 29 min"
               }
             },
             {
               "value": "severe",
               "label": {
                 "en": "30 min and more",
-                "fr": "30 min et plus"
+                "fr": "30 min et plus",
+                "de": "30 min und mehr",
+                "es": "30 min o más"
               }
             }
           ],
@@ -721,7 +998,9 @@
           "type": "string",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           }
         },
         {
@@ -729,7 +1008,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -737,7 +1018,9 @@
           "type": "string",
           "label": {
             "en": "Destination",
-            "fr": "Destination"
+            "fr": "Destination",
+            "de": "Ziel",
+            "es": "Destino"
           }
         },
         {
@@ -745,7 +1028,9 @@
           "type": "string",
           "label": {
             "en": "Mission (RER, Transilien)",
-            "fr": "Mission (RER, Transilien)"
+            "fr": "Mission (RER, Transilien)",
+            "de": "Mission (RER, Transilien)",
+            "es": "Misión (RER, Transilien)"
           }
         },
         {
@@ -753,7 +1038,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -761,7 +1048,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Erwartete Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -769,7 +1058,9 @@
           "type": "string",
           "label": {
             "en": "Platform",
-            "fr": "Voie"
+            "fr": "Voie",
+            "de": "Gleis",
+            "es": "Vía"
           }
         },
         {
@@ -777,7 +1068,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -785,11 +1078,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -798,11 +1095,15 @@
       "key": "departure_cancelled",
       "label": {
         "en": "IDFM: departure cancelled",
-        "fr": "IDFM : départ supprimé"
+        "fr": "IDFM : départ supprimé",
+        "de": "IDFM: Abfahrt fällt aus",
+        "es": "IDFM: salida cancelada"
       },
       "description": {
         "en": "A followed departure is cancelled.",
-        "fr": "Un départ suivi est supprimé."
+        "fr": "Un départ suivi est supprimé.",
+        "de": "Eine verfolgte Abfahrt fällt aus.",
+        "es": "Una salida seguida se cancela."
       },
       "fields": [
         {
@@ -811,11 +1112,15 @@
           "source": "devices",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           },
           "description": {
             "en": "A stop device of the integration. Leave empty for any stop.",
-            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts.",
+            "de": "Ein Haltestellen-Gerät der Integration. Leer lassen für alle Haltestellen.",
+            "es": "Un dispositivo de parada de la integración. Déjalo vacío para cualquier parada."
           },
           "required": false
         }
@@ -826,7 +1131,9 @@
           "type": "string",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           }
         },
         {
@@ -834,7 +1141,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -842,7 +1151,9 @@
           "type": "string",
           "label": {
             "en": "Destination",
-            "fr": "Destination"
+            "fr": "Destination",
+            "de": "Ziel",
+            "es": "Destino"
           }
         },
         {
@@ -850,7 +1161,9 @@
           "type": "string",
           "label": {
             "en": "Mission (RER, Transilien)",
-            "fr": "Mission (RER, Transilien)"
+            "fr": "Mission (RER, Transilien)",
+            "de": "Mission (RER, Transilien)",
+            "es": "Misión (RER, Transilien)"
           }
         },
         {
@@ -858,7 +1171,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -866,7 +1181,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Erwartete Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -874,7 +1191,9 @@
           "type": "string",
           "label": {
             "en": "Platform",
-            "fr": "Voie"
+            "fr": "Voie",
+            "de": "Gleis",
+            "es": "Vía"
           }
         },
         {
@@ -882,11 +1201,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -895,11 +1218,15 @@
       "key": "departure_soon",
       "label": {
         "en": "IDFM: departure soon",
-        "fr": "IDFM : départ imminent"
+        "fr": "IDFM : départ imminent",
+        "de": "IDFM: Abfahrt in Kürze",
+        "es": "IDFM: salida inminente"
       },
       "description": {
         "en": "A followed departure leaves in N minutes, counted on its real-time departure.",
-        "fr": "Un départ suivi part dans N minutes, comptées sur son départ en temps réel."
+        "fr": "Un départ suivi part dans N minutes, comptées sur son départ en temps réel.",
+        "de": "Eine verfolgte Abfahrt erfolgt in N Minuten, gerechnet ab ihrer Echtzeit-Abfahrt.",
+        "es": "Una salida seguida sale dentro de N minutos, contados sobre su hora de salida en tiempo real."
       },
       "fields": [
         {
@@ -908,11 +1235,15 @@
           "source": "devices",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           },
           "description": {
             "en": "A stop device of the integration. Leave empty for any stop.",
-            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts."
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour tous les arrêts.",
+            "de": "Ein Haltestellen-Gerät der Integration. Leer lassen für alle Haltestellen.",
+            "es": "Un dispositivo de parada de la integración. Déjalo vacío para cualquier parada."
           },
           "required": false
         },
@@ -921,49 +1252,63 @@
           "type": "select",
           "label": {
             "en": "Leaves in",
-            "fr": "Départ dans"
+            "fr": "Départ dans",
+            "de": "Abfahrt in",
+            "es": "Sale en"
           },
           "options": [
             {
               "value": "2",
               "label": {
                 "en": "2 min",
-                "fr": "2 min"
+                "fr": "2 min",
+                "de": "2 min",
+                "es": "2 min"
               }
             },
             {
               "value": "5",
               "label": {
                 "en": "5 min",
-                "fr": "5 min"
+                "fr": "5 min",
+                "de": "5 min",
+                "es": "5 min"
               }
             },
             {
               "value": "10",
               "label": {
                 "en": "10 min",
-                "fr": "10 min"
+                "fr": "10 min",
+                "de": "10 min",
+                "es": "10 min"
               }
             },
             {
               "value": "15",
               "label": {
                 "en": "15 min",
-                "fr": "15 min"
+                "fr": "15 min",
+                "de": "15 min",
+                "es": "15 min"
               }
             },
             {
               "value": "20",
               "label": {
                 "en": "20 min",
-                "fr": "20 min"
+                "fr": "20 min",
+                "de": "20 min",
+                "es": "20 min"
               }
             },
             {
               "value": "30",
               "label": {
                 "en": "30 min",
-                "fr": "30 min"
+                "fr": "30 min",
+                "de": "30 min",
+                "es": "30 min"
               }
             }
           ],
@@ -976,7 +1321,9 @@
           "type": "string",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           }
         },
         {
@@ -984,7 +1331,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -992,7 +1341,9 @@
           "type": "string",
           "label": {
             "en": "Destination",
-            "fr": "Destination"
+            "fr": "Destination",
+            "de": "Ziel",
+            "es": "Destino"
           }
         },
         {
@@ -1000,7 +1351,9 @@
           "type": "string",
           "label": {
             "en": "Mission (RER, Transilien)",
-            "fr": "Mission (RER, Transilien)"
+            "fr": "Mission (RER, Transilien)",
+            "de": "Mission (RER, Transilien)",
+            "es": "Misión (RER, Transilien)"
           }
         },
         {
@@ -1008,7 +1361,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -1016,7 +1371,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Erwartete Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -1024,7 +1381,9 @@
           "type": "string",
           "label": {
             "en": "Platform",
-            "fr": "Voie"
+            "fr": "Voie",
+            "de": "Gleis",
+            "es": "Vía"
           }
         },
         {
@@ -1032,7 +1391,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -1040,11 +1401,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1053,11 +1418,15 @@
       "key": "line_disrupted",
       "label": {
         "en": "IDFM: line disrupted",
-        "fr": "IDFM : ligne perturbée"
+        "fr": "IDFM : ligne perturbée",
+        "de": "IDFM: Linie gestört",
+        "es": "IDFM: línea con incidencias"
       },
       "description": {
         "en": "A new disruption applies to a followed line (information messages left out).",
-        "fr": "Une nouvelle perturbation touche une ligne suivie (messages d’information exclus)."
+        "fr": "Une nouvelle perturbation touche une ligne suivie (messages d’information exclus).",
+        "de": "Eine neue Störung betrifft eine verfolgte Linie (Informationsmeldungen ausgenommen).",
+        "es": "Una nueva incidencia afecta a una línea seguida (sin contar los mensajes informativos)."
       },
       "fields": [
         {
@@ -1066,11 +1435,15 @@
           "source": "devices",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           },
           "description": {
             "en": "A line device of the integration. Leave empty for any line.",
-            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes."
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes.",
+            "de": "Ein Linien-Gerät der Integration. Leer lassen für alle Linien.",
+            "es": "Un dispositivo de línea de la integración. Déjalo vacío para cualquier línea."
           },
           "required": false
         },
@@ -1079,25 +1452,33 @@
           "type": "multi_select",
           "label": {
             "en": "Severity",
-            "fr": "Gravité"
+            "fr": "Gravité",
+            "de": "Schwere",
+            "es": "Gravedad"
           },
           "description": {
             "en": "Leave empty for both.",
-            "fr": "Laissez vide pour les deux."
+            "fr": "Laissez vide pour les deux.",
+            "de": "Leer lassen für beide.",
+            "es": "Déjalo vacío para ambas."
           },
           "options": [
             {
               "value": "blocking",
               "label": {
                 "en": "Interrupted",
-                "fr": "Interrompu"
+                "fr": "Interrompu",
+                "de": "Unterbrochen",
+                "es": "Interrumpida"
               }
             },
             {
               "value": "disrupted",
               "label": {
                 "en": "Disrupted",
-                "fr": "Perturbé"
+                "fr": "Perturbé",
+                "de": "Gestört",
+                "es": "Con incidencias"
               }
             }
           ],
@@ -1108,25 +1489,33 @@
           "type": "multi_select",
           "label": {
             "en": "Cause",
-            "fr": "Cause"
+            "fr": "Cause",
+            "de": "Ursache",
+            "es": "Causa"
           },
           "description": {
             "en": "Leave empty for both.",
-            "fr": "Laissez vide pour les deux."
+            "fr": "Laissez vide pour les deux.",
+            "de": "Leer lassen für beide.",
+            "es": "Déjalo vacío para ambas."
           },
           "options": [
             {
               "value": "incident",
               "label": {
                 "en": "Incident",
-                "fr": "Incident"
+                "fr": "Incident",
+                "de": "Störung",
+                "es": "Incidencia"
               }
             },
             {
               "value": "works",
               "label": {
                 "en": "Works",
-                "fr": "Travaux"
+                "fr": "Travaux",
+                "de": "Bauarbeiten",
+                "es": "Obras"
               }
             }
           ],
@@ -1139,7 +1528,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -1147,7 +1538,9 @@
           "type": "string",
           "label": {
             "en": "Title",
-            "fr": "Titre"
+            "fr": "Titre",
+            "de": "Titel",
+            "es": "Título"
           }
         },
         {
@@ -1155,7 +1548,9 @@
           "type": "string",
           "label": {
             "en": "Message",
-            "fr": "Message"
+            "fr": "Message",
+            "de": "Meldung",
+            "es": "Mensaje"
           }
         },
         {
@@ -1163,7 +1558,9 @@
           "type": "string",
           "label": {
             "en": "Start (YYYY-MM-DD HH:MM)",
-            "fr": "Début (AAAA-MM-JJ HH:MM)"
+            "fr": "Début (AAAA-MM-JJ HH:MM)",
+            "de": "Beginn (JJJJ-MM-TT HH:MM)",
+            "es": "Inicio (AAAA-MM-DD HH:MM)"
           }
         },
         {
@@ -1171,7 +1568,9 @@
           "type": "string",
           "label": {
             "en": "End (YYYY-MM-DD HH:MM)",
-            "fr": "Fin (AAAA-MM-JJ HH:MM)"
+            "fr": "Fin (AAAA-MM-JJ HH:MM)",
+            "de": "Ende (JJJJ-MM-TT HH:MM)",
+            "es": "Fin (AAAA-MM-DD HH:MM)"
           }
         },
         {
@@ -1179,11 +1578,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1192,11 +1595,15 @@
       "key": "line_restored",
       "label": {
         "en": "IDFM: traffic back to normal",
-        "fr": "IDFM : retour à la normale"
+        "fr": "IDFM : retour à la normale",
+        "de": "IDFM: Verkehr wieder normal",
+        "es": "IDFM: tráfico normalizado"
       },
       "description": {
         "en": "A followed line that was disrupted runs normally again.",
-        "fr": "Une ligne suivie qui était perturbée circule de nouveau normalement."
+        "fr": "Une ligne suivie qui était perturbée circule de nouveau normalement.",
+        "de": "Eine verfolgte Linie, die gestört war, fährt wieder normal.",
+        "es": "Una línea seguida que tenía incidencias vuelve a circular con normalidad."
       },
       "fields": [
         {
@@ -1205,11 +1612,15 @@
           "source": "devices",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           },
           "description": {
             "en": "A line device of the integration. Leave empty for any line.",
-            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes."
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour toutes les lignes.",
+            "de": "Ein Linien-Gerät der Integration. Leer lassen für alle Linien.",
+            "es": "Un dispositivo de línea de la integración. Déjalo vacío para cualquier línea."
           },
           "required": false
         }
@@ -1220,7 +1631,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -1228,11 +1641,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1243,11 +1660,15 @@
       "key": "get_next_departures",
       "label": {
         "en": "IDFM: next departures",
-        "fr": "IDFM : prochains départs"
+        "fr": "IDFM : prochains départs",
+        "de": "IDFM: nächste Abfahrten",
+        "es": "IDFM: próximas salidas"
       },
       "description": {
         "en": "The next departure of a stop, its delay or cancellation, and a sentence for a message.",
-        "fr": "Le prochain départ d’un arrêt, son retard ou sa suppression, et une phrase pour un message."
+        "fr": "Le prochain départ d’un arrêt, son retard ou sa suppression, et une phrase pour un message.",
+        "de": "Die nächste Abfahrt einer Haltestelle, ihre Verspätung oder ihr Ausfall und ein Satz für eine Nachricht.",
+        "es": "La próxima salida de una parada, su retraso o cancelación, y una frase para un mensaje."
       },
       "timeout_seconds": 30,
       "fields": [
@@ -1257,11 +1678,15 @@
           "source": "devices",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           },
           "description": {
             "en": "A stop device of the integration. Leave empty for the first stop.",
-            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt."
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt.",
+            "de": "Ein Haltestellen-Gerät der Integration. Leer lassen für die erste Haltestelle.",
+            "es": "Un dispositivo de parada de la integración. Déjalo vacío para la primera parada."
           },
           "required": false
         }
@@ -1272,7 +1697,9 @@
           "type": "string",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           }
         },
         {
@@ -1280,7 +1707,9 @@
           "type": "boolean",
           "label": {
             "en": "Departure found",
-            "fr": "Départ trouvé"
+            "fr": "Départ trouvé",
+            "de": "Abfahrt gefunden",
+            "es": "Salida encontrada"
           }
         },
         {
@@ -1288,7 +1717,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -1296,7 +1727,9 @@
           "type": "string",
           "label": {
             "en": "Destination",
-            "fr": "Destination"
+            "fr": "Destination",
+            "de": "Ziel",
+            "es": "Destino"
           }
         },
         {
@@ -1304,7 +1737,9 @@
           "type": "string",
           "label": {
             "en": "Mission",
-            "fr": "Mission"
+            "fr": "Mission",
+            "de": "Mission",
+            "es": "Misión"
           }
         },
         {
@@ -1312,7 +1747,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -1320,7 +1757,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Erwartete Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -1328,7 +1767,9 @@
           "type": "number",
           "label": {
             "en": "Minutes until departure",
-            "fr": "Minutes avant le départ"
+            "fr": "Minutes avant le départ",
+            "de": "Minuten bis zur Abfahrt",
+            "es": "Minutos hasta la salida"
           }
         },
         {
@@ -1336,7 +1777,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -1344,7 +1787,9 @@
           "type": "string",
           "label": {
             "en": "Status (on_time, delayed, cancelled)",
-            "fr": "État (on_time, delayed, cancelled)"
+            "fr": "État (on_time, delayed, cancelled)",
+            "de": "Status (on_time, delayed, cancelled)",
+            "es": "Estado (on_time, delayed, cancelled)"
           }
         },
         {
@@ -1352,7 +1797,9 @@
           "type": "boolean",
           "label": {
             "en": "Cancelled",
-            "fr": "Supprimé"
+            "fr": "Supprimé",
+            "de": "Fällt aus",
+            "es": "Cancelada"
           }
         },
         {
@@ -1360,7 +1807,9 @@
           "type": "string",
           "label": {
             "en": "Platform",
-            "fr": "Voie"
+            "fr": "Voie",
+            "de": "Gleis",
+            "es": "Vía"
           }
         },
         {
@@ -1368,7 +1817,9 @@
           "type": "number",
           "label": {
             "en": "Disrupted departures",
-            "fr": "Départs perturbés"
+            "fr": "Départs perturbés",
+            "de": "Gestörte Abfahrten",
+            "es": "Salidas con incidencias"
           }
         },
         {
@@ -1376,11 +1827,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1389,11 +1844,15 @@
       "key": "get_line_traffic",
       "label": {
         "en": "IDFM: line traffic",
-        "fr": "IDFM : trafic d’une ligne"
+        "fr": "IDFM : trafic d’une ligne",
+        "de": "IDFM: Verkehr einer Linie",
+        "es": "IDFM: tráfico de una línea"
       },
       "description": {
         "en": "The state of a followed line, its main disruption and a sentence for a message.",
-        "fr": "L’état d’une ligne suivie, sa principale perturbation et une phrase pour un message."
+        "fr": "L’état d’une ligne suivie, sa principale perturbation et une phrase pour un message.",
+        "de": "Der Zustand einer verfolgten Linie, ihre wichtigste Störung und ein Satz für eine Nachricht.",
+        "es": "El estado de una línea seguida, su incidencia principal y una frase para un mensaje."
       },
       "timeout_seconds": 30,
       "fields": [
@@ -1403,11 +1862,15 @@
           "source": "devices",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           },
           "description": {
             "en": "A line device of the integration. Leave empty for the first line.",
-            "fr": "Un appareil ligne de l’intégration. Laissez vide pour la première ligne."
+            "fr": "Un appareil ligne de l’intégration. Laissez vide pour la première ligne.",
+            "de": "Ein Linien-Gerät der Integration. Leer lassen für die erste Linie.",
+            "es": "Un dispositivo de línea de la integración. Déjalo vacío para la primera línea."
           },
           "required": false
         }
@@ -1418,7 +1881,9 @@
           "type": "string",
           "label": {
             "en": "Line",
-            "fr": "Ligne"
+            "fr": "Ligne",
+            "de": "Linie",
+            "es": "Línea"
           }
         },
         {
@@ -1426,7 +1891,9 @@
           "type": "string",
           "label": {
             "en": "State (normal, disrupted, blocked)",
-            "fr": "État (normal, disrupted, blocked)"
+            "fr": "État (normal, disrupted, blocked)",
+            "de": "Zustand (normal, disrupted, blocked)",
+            "es": "Estado (normal, disrupted, blocked)"
           }
         },
         {
@@ -1434,7 +1901,9 @@
           "type": "boolean",
           "label": {
             "en": "Disrupted",
-            "fr": "Perturbée"
+            "fr": "Perturbée",
+            "de": "Gestört",
+            "es": "Con incidencias"
           }
         },
         {
@@ -1442,7 +1911,9 @@
           "type": "number",
           "label": {
             "en": "Current disruptions",
-            "fr": "Perturbations en cours"
+            "fr": "Perturbations en cours",
+            "de": "Aktuelle Störungen",
+            "es": "Incidencias en curso"
           }
         },
         {
@@ -1450,7 +1921,9 @@
           "type": "string",
           "label": {
             "en": "Title",
-            "fr": "Titre"
+            "fr": "Titre",
+            "de": "Titel",
+            "es": "Título"
           }
         },
         {
@@ -1458,7 +1931,9 @@
           "type": "string",
           "label": {
             "en": "Message",
-            "fr": "Message"
+            "fr": "Message",
+            "de": "Meldung",
+            "es": "Mensaje"
           }
         },
         {
@@ -1466,11 +1941,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, der direkt in eine Nachricht passt.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1481,11 +1960,15 @@
       "key": "departures",
       "label": {
         "en": "IDFM departures",
-        "fr": "Départs IDFM"
+        "fr": "Départs IDFM",
+        "de": "IDFM-Abfahrten",
+        "es": "Salidas IDFM"
       },
       "description": {
         "en": "The next departures of a stop, in real time.",
-        "fr": "Les prochains départs d’un arrêt, en temps réel."
+        "fr": "Les prochains départs d’un arrêt, en temps réel.",
+        "de": "Die nächsten Abfahrten einer Haltestelle in Echtzeit.",
+        "es": "Las próximas salidas de una parada, en tiempo real."
       },
       "icon": "clock",
       "settings": [
@@ -1495,11 +1978,15 @@
           "source": "devices",
           "label": {
             "en": "Stop",
-            "fr": "Arrêt"
+            "fr": "Arrêt",
+            "de": "Haltestelle",
+            "es": "Parada"
           },
           "description": {
             "en": "A stop device of the integration. Leave empty for the first stop.",
-            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt."
+            "fr": "Un appareil arrêt de l’intégration. Laissez vide pour le premier arrêt.",
+            "de": "Ein Haltestellen-Gerät der Integration. Leer lassen für die erste Haltestelle.",
+            "es": "Un dispositivo de parada de la integración. Déjalo vacío para la primera parada."
           },
           "required": false
         },
@@ -1508,15 +1995,21 @@
           "type": "string",
           "label": {
             "en": "Other stop",
-            "fr": "Autre arrêt"
+            "fr": "Autre arrêt",
+            "de": "Andere Haltestelle",
+            "es": "Otra parada"
           },
           "description": {
             "en": "A stop name or number, to show a stop that is not configured (it spends the departures quota).",
-            "fr": "Un nom ou numéro d’arrêt, pour afficher un arrêt non configuré (il consomme le quota des départs)."
+            "fr": "Un nom ou numéro d’arrêt, pour afficher un arrêt non configuré (il consomme le quota des départs).",
+            "de": "Ein Haltestellenname oder eine Nummer, um eine nicht eingerichtete Haltestelle anzuzeigen (verbraucht Abfahrtskontingent).",
+            "es": "Un nombre o número de parada, para mostrar una parada no configurada (consume la cuota de salidas)."
           },
           "placeholder": {
             "en": "Châtelet",
-            "fr": "Châtelet"
+            "fr": "Châtelet",
+            "de": "Châtelet",
+            "es": "Châtelet"
           },
           "required": false
         },
@@ -1525,11 +2018,15 @@
           "type": "string",
           "label": {
             "en": "Line of the other stop",
-            "fr": "Ligne de l’autre arrêt"
+            "fr": "Ligne de l’autre arrêt",
+            "de": "Linie der anderen Haltestelle",
+            "es": "Línea de la otra parada"
           },
           "placeholder": {
             "en": "Métro 1",
-            "fr": "Métro 1"
+            "fr": "Métro 1",
+            "de": "Métro 1",
+            "es": "Métro 1"
           },
           "required": false
         },
@@ -1538,7 +2035,9 @@
           "type": "number",
           "label": {
             "en": "Departures shown",
-            "fr": "Départs affichés"
+            "fr": "Départs affichés",
+            "de": "Angezeigte Abfahrten",
+            "es": "Salidas mostradas"
           },
           "min": 1,
           "max": 8,
@@ -1551,11 +2050,15 @@
       "key": "traffic",
       "label": {
         "en": "IDFM traffic",
-        "fr": "Trafic IDFM"
+        "fr": "Trafic IDFM",
+        "de": "IDFM-Verkehr",
+        "es": "Tráfico IDFM"
       },
       "description": {
         "en": "The state of lines and their disruptions.",
-        "fr": "L’état des lignes et leurs perturbations."
+        "fr": "L’état des lignes et leurs perturbations.",
+        "de": "Der Zustand der Linien und ihre Störungen.",
+        "es": "El estado de las líneas y sus incidencias."
       },
       "icon": "alert-triangle",
       "settings": [
@@ -1564,15 +2067,21 @@
           "type": "string",
           "label": {
             "en": "Lines",
-            "fr": "Lignes"
+            "fr": "Lignes",
+            "de": "Linien",
+            "es": "Líneas"
           },
           "description": {
             "en": "Empty: the followed lines.",
-            "fr": "Vide : les lignes suivies."
+            "fr": "Vide : les lignes suivies.",
+            "de": "Leer: die verfolgten Linien.",
+            "es": "Vacío: las líneas seguidas."
           },
           "placeholder": {
             "en": "RER A, Métro 1",
-            "fr": "RER A, Métro 1"
+            "fr": "RER A, Métro 1",
+            "de": "RER A, Métro 1",
+            "es": "RER A, Métro 1"
           },
           "required": false
         }

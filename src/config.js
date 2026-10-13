@@ -21,12 +21,17 @@
 //                               its window, or all day without one);
 //   - `traffic_interval`        minutes between two reads of the traffic;
 //   - `departures_quota`        the daily quota of the departures API of the
-//                               account (1 000 on a new one, can be raised).
+//                               account (1 000 on a new one, can be raised);
+//   - `language`                language of the texts Gladys does not ask for
+//                               in a language (device names, scene summaries):
+//                               `auto` follows the last widget request.
 //
 // Internal keys, outside the config_schema (never shown in the UI):
 //   - `last_language`   language of the last widget request, for the device
 //                       names and the scene texts after a restart.
 // -----------------------------------------------------------------------------
+
+import { isLanguage } from './i18n.js';
 
 const MAX_STOPS = 3;
 const MAX_LINES = 6;
@@ -36,6 +41,7 @@ const POLL_INTERVAL = { min: 1, max: 30, default: 2 };
 const TRAFFIC_INTERVAL = { min: 2, max: 60, default: 5 };
 const DEPARTURES_QUOTA = { min: 100, max: 1000000, default: 1000 };
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const AUTO_LANGUAGE = 'auto';
 // PRIM keys are long random tokens; anything this short cannot be one.
 const API_KEY_REGEX = /^[A-Za-z0-9_-]{16,128}$/;
 const HOURS_REGEX = /^(\d{1,2})[:hH](\d{2})?\s*[-–à>]+\s*(\d{1,2})[:hH](\d{2})?$/;
@@ -172,7 +178,8 @@ function readStops(config) {
  * @param {object} [rawConfig] - The raw config values.
  * @returns {{ apiKey: string, stops: Array, lines: string[], departureCount: number,
  * delayThreshold: number, pollInterval: number, trafficInterval: number,
- * departuresQuota: number }} The config (intervals in minutes).
+ * departuresQuota: number, language: string }} The config (intervals in
+ * minutes, language 'auto' or a language code).
  * @example
  * normalizeConfig({ api_key: '…', stop_1: 'Massy - Palaiseau', stop_1_line: 'RER B' });
  */
@@ -188,6 +195,7 @@ function normalizeConfig(rawConfig = {}) {
     pollInterval: readNumber(config.poll_interval, POLL_INTERVAL),
     trafficInterval: readNumber(config.traffic_interval, TRAFFIC_INTERVAL),
     departuresQuota: readNumber(config.departures_quota, DEPARTURES_QUOTA),
+    language: isLanguage(config.language) ? config.language : AUTO_LANGUAGE,
   };
 }
 
@@ -212,6 +220,7 @@ export {
   POLL_INTERVAL,
   TRAFFIC_INTERVAL,
   DEPARTURES_QUOTA,
+  AUTO_LANGUAGE,
   DAYS,
   INTERNAL_KEYS,
   normalizeConfig,

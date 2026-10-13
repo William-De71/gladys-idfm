@@ -8,6 +8,7 @@ import {
   parseLines,
   readLanguage,
   MAX_LINES,
+  AUTO_LANGUAGE,
 } from '../src/config.js';
 
 test('reads the stops, their line, direction, window and days', () => {
@@ -77,4 +78,13 @@ test('splits the followed lines, without duplicates', () => {
 test('reads the stored language', () => {
   assert.equal(readLanguage({ last_language: 'en' }, 'fr'), 'en');
   assert.equal(readLanguage({ last_language: 'english' }, 'fr'), 'fr');
+});
+
+test('reads the language setting, automatic unless a known language', () => {
+  for (const language of ['en', 'fr', 'de', 'es']) {
+    assert.equal(normalizeConfig({ language }).language, language);
+  }
+  assert.equal(normalizeConfig({ language: 'auto' }).language, AUTO_LANGUAGE);
+  assert.equal(normalizeConfig({ language: 'it' }).language, AUTO_LANGUAGE);
+  assert.equal(normalizeConfig({}).language, AUTO_LANGUAGE);
 });

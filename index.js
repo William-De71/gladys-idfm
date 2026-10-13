@@ -26,7 +26,13 @@
 
 import { readFileSync } from 'node:fs';
 import { GladysIntegration, logger } from '@gladysassistant/integration-sdk';
-import { normalizeConfig, readLanguage, parseLines, INTERNAL_KEYS } from './src/config.js';
+import {
+  normalizeConfig,
+  readLanguage,
+  parseLines,
+  INTERNAL_KEYS,
+  AUTO_LANGUAGE,
+} from './src/config.js';
 import { createPrimClient, buildUserAgent, APIS } from './src/prim-api.js';
 import { createOpenDataClient } from './src/opendata.js';
 import { createStore } from './src/store.js';
@@ -51,7 +57,7 @@ import {
 import { buildDepartureEvent, buildTrafficEvent } from './src/events.js';
 import { isBusy, plannedPollInterval } from './src/schedule.js';
 import { formatTime } from './src/time.js';
-import { t, all, lineStateText } from './src/i18n.js';
+import { t, all, lineStateText, LANGUAGES } from './src/i18n.js';
 import {
   SCENE_ACTIONS,
   buildNextDeparturesOutputs,
@@ -89,7 +95,8 @@ const RESOLVE_RETRY_MS = 5 * 60 * 1000;
 const gladys = new GladysIntegration();
 
 let config = normalizeConfig();
-// Language of the last widget request: names of the devices, scene summaries.
+// Language of the last widget request: the fallback of the texts Gladys does
+// not ask for in a language, when the `language` setting is `auto`.
 let language = 'fr';
 // Device external ids the user created (states are only published for them).
 let createdDevices = new Set();
@@ -146,6 +153,16 @@ function rememberLanguage(next) {
   gladys
     .setConfig({ [INTERNAL_KEYS.language]: next })
     .catch((err) => logger.warn(`Unable to store the language: ${err.message}`));
+}
+
+/**
+ * @description Language of the texts Gladys does not ask for in a language
+ * (device names and states, scene summaries and outputs): the `language`
+ * setting, or the language of the last widget request when it is `auto`.
+ * @returns {string} The language.
+ */
+function textLanguage() {
+  return config.language === AUTO_LANGUAGE ? language : config.language;
 }
 
 /**
@@ -240,7 +257,7 @@ async function publishStopStates(followed, snapshot) {
   await gladys.publishStates(
     buildStopStates(gladys, followed, snapshot.departures, {
       threshold: config.delayThreshold,
-      language,
+      language: textLanguage(),
       now: Date.now(),
     }),
   );
@@ -270,7 +287,7 @@ async function publishEvents(events) {
  */
 async function publishDepartureEvents(followed, events) {
   await publishEvents(
-    events.map((event) => buildDepartureEvent(gladys, followed, event, language)),
+    events.map((event) => buildDepartureEvent(gladys, followed, event, textLanguage())),
   );
 }
 
@@ -388,7 +405,7 @@ async function onTrafficRead() {
           gladys,
           lines.find((line) => line.id === event.lineId),
           event,
-          language,
+          textLanguage(),
         ),
       ),
     );
@@ -396,7 +413,7 @@ async function onTrafficRead() {
   await trafficTracker.persist(now, ids);
   const states = lines
     .filter((line) => createdDevices.has(idsOf(gladys, DEVICE_TYPES.LINE, line.id).device))
-    .flatMap((line) => buildLineStates(gladys, line, byLine.get(line.id), language));
+    .flatMap((line) => buildLineStates(gladys, line, byLine.get(line.id), textLanguage()));
   if (states.length > 0) {
     await gladys
       .publishStates(states)
@@ -536,8 +553,8 @@ function pick(externalId, type) {
  */
 async function publishDiscoveredDevices() {
   const devices = [
-    ...stops.map((followed) => buildStopDevice(gladys, followed, language)),
-    ...lines.map((line) => buildLineDevice(gladys, line, language)),
+    ...stops.map((followed) => buildStopDevice(gladys, followed, textLanguage())),
+    ...lines.map((line) => buildLineDevice(gladys, line, textLanguage())),
   ];
   await gladys.publishDiscoveredDevices(devices);
   return devices.length;
@@ -701,7 +718,7 @@ gladys.onSceneAction(SCENE_ACTIONS.GET_NEXT_DEPARTURES, async (fields) => {
     departures: snapshot.departures,
     threshold: config.delayThreshold,
     now: Date.now(),
-    language,
+    language: textLanguage(),
   });
 });
 
@@ -712,7 +729,7 @@ gladys.onSceneAction(SCENE_ACTIONS.GET_LINE_TRAFFIC, async (fields) => {
   }
   const current = await getTraffic(SNAPSHOT_MAX_AGE_MS);
   const byLine = readTraffic(current.answer, [line.id], Date.now());
-  return buildLineTrafficOutputs({ line, traffic: byLine.get(line.id), language });
+  return buildLineTrafficOutputs({ line, traffic: byLine.get(line.id), language: textLanguage() });
 });
 
 // --- Configuration screen actions --------------------------------------------------
@@ -721,24 +738,18 @@ gladys.onAction(ACTIONS.TEST_CONNECTION, async () => {
     return all('noApiKey');
   }
   await resolveConfig();
-  const lists = { en: [], fr: [] };
-  const push = (en, fr) => {
-    lists.en.push(en);
-    lists.fr.push(fr);
-  };
+  const messages = [];
   for (const followed of stops) {
     try {
       const snapshot = await watcher.get(followed, 0);
       const first = snapshot.departures[0];
       const next = first ? formatTime(first.departure) : '–';
-      push(
-        `${followed.name}: OK, ${snapshot.departures.length} departure(s), next ${next}`,
-        `${followed.name} : OK, ${snapshot.departures.length} départ(s), prochain ${next}`,
+      messages.push(
+        all('stopOk', { stop: followed.name, count: snapshot.departures.length, next }),
       );
     } catch (err) {
-      push(
-        `${followed.name}: ${readErrorMessage(err, 'en')}`,
-        `${followed.name} : ${readErrorMessage(err, 'fr')}`,
+      messages.push(
+        all('stopError', (lang) => ({ stop: followed.name, error: readErrorMessage(err, lang) })),
       );
     }
   }
@@ -752,77 +763,69 @@ gladys.onAction(ACTIONS.TEST_CONNECTION, async () => {
       );
       lines.forEach((line) => {
         const { state } = byLine.get(line.id);
-        push(
-          `${line.name}: ${lineStateText(state, 'en')}`,
-          `${line.name} : ${lineStateText(state, 'fr')}`,
+        messages.push(
+          all('lineState', (lang) => ({ line: line.name, state: lineStateText(state, lang) })),
         );
       });
       if (lines.length === 0) {
-        push('Traffic API: OK', 'API trafic : OK');
+        messages.push(all('trafficApiOk'));
       }
     } catch (err) {
-      push(`Traffic: ${readErrorMessage(err, 'en')}`, `Trafic : ${readErrorMessage(err, 'fr')}`);
+      messages.push(all('trafficError', (lang) => ({ error: readErrorMessage(err, lang) })));
     }
   }
-  notFound.forEach((entry) => push(`"${entry}": not found`, `« ${entry} » : introuvable`));
-  push(
-    `${departuresQuota.used()}/${config.departuresQuota} departure requests in 24 h, every ${pollInterval} min`,
-    `${departuresQuota.used()}/${config.departuresQuota} requêtes de départs en 24 h, toutes les ${pollInterval} min`,
+  notFound.forEach((entry) => messages.push(all('entryNotFound', { name: entry })));
+  messages.push(
+    all('requestsCount', {
+      used: departuresQuota.used(),
+      quota: config.departuresQuota,
+      interval: pollInterval,
+    }),
   );
   await refreshStatus();
-  return { en: lists.en.join(' · '), fr: lists.fr.join(' · ') };
+  return Object.fromEntries(
+    LANGUAGES.map((lang) => [lang, messages.map((entry) => entry[lang]).join(' · ')]),
+  );
 });
 
 gladys.onAction(ACTIONS.SEARCH_STOP, async (fields) => {
   const query = typeof fields.query === 'string' ? fields.query.trim() : '';
   if (query.length < 2) {
-    return {
-      en: 'Type at least 2 characters of the stop name.',
-      fr: 'Saisissez au moins 2 caractères du nom de l’arrêt.',
-    };
+    return all('searchStopTooShort');
   }
   const found = (await stopResolver.search(query, 30)).slice(0, 8);
   if (found.length === 0) {
-    return { en: `No stop matches "${query}".`, fr: `Aucun arrêt ne correspond à « ${query} ».` };
+    return all('searchStopNone', { query });
   }
-  const types = {
-    railStation: { en: 'train', fr: 'train' },
-    metroStation: { en: 'metro', fr: 'métro' },
-    onstreetTram: { en: 'tram', fr: 'tram' },
-    onstreetBus: { en: 'bus', fr: 'bus' },
+  const kinds = {
+    railStation: 'kindTrain',
+    metroStation: 'kindMetro',
+    onstreetTram: 'kindTram',
+    onstreetBus: 'kindBus',
   };
   const list = (lang) =>
     found
       .map((stop) => {
-        const kind = types[stop.type]?.[lang] ?? stop.type;
+        const kind = kinds[stop.type] ? t(kinds[stop.type], lang) : stop.type;
         return `${stop.name} (${[kind, stop.town].filter(Boolean).join(', ')}) = ${stop.id}`;
       })
       .join(' · ');
-  return {
-    en: `${list('en')}. Copy the number of the right stop into a stop field.`,
-    fr: `${list('fr')}. Copiez le numéro du bon arrêt dans un champ d’arrêt.`,
-  };
+  return all('searchStopFound', (lang) => ({ list: list(lang) }));
 });
 
 gladys.onAction(ACTIONS.SEARCH_LINE, async (fields) => {
   const query = typeof fields.query === 'string' ? fields.query.trim() : '';
   if (!query) {
-    return {
-      en: 'Type a line, e.g. "RER B" or "Bus 91".',
-      fr: 'Saisissez une ligne, par exemple « RER B » ou « Bus 91 ».',
-    };
+    return all('searchLineEmpty');
   }
   const found = (await lineResolver.search(query)).slice(0, 8);
   if (found.length === 0) {
-    return { en: `No line matches "${query}".`, fr: `Aucune ligne ne correspond à « ${query} ».` };
+    return all('searchLineNone', { query });
   }
   const list = found
     .map((line) => `${line.label}${line.network ? ` (${line.network})` : ''} = ${line.id}`)
     .join(' · ');
-  return {
-    en: `${list}. Copy the identifier of the right line into a line field.`,
-    fr: `${list}. Copiez l’identifiant de la bonne ligne dans un champ de ligne.`,
-  };
+  return all('searchLineFound', { list });
 });
 
 // --- Devices -----------------------------------------------------------------------
@@ -850,7 +853,7 @@ gladys.onDeviceCreated(async (device) => {
     if (line) {
       const byLine = readTraffic(traffic.answer, [line.id], Date.now());
       await gladys
-        .publishStates(buildLineStates(gladys, line, byLine.get(line.id), language))
+        .publishStates(buildLineStates(gladys, line, byLine.get(line.id), textLanguage()))
         .catch((err) =>
           logger.warn(`Unable to publish the traffic of ${line.name}: ${err.message}`),
         );
