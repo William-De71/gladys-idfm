@@ -838,9 +838,12 @@ gladys.onDeviceCreated(async (device) => {
     const followed = stops.find((candidate) => candidate.key === parsed.key);
     const snapshot = followed ? watcher.peek(followed.key) : null;
     if (snapshot) {
+      // States sent before the device existed were dropped by Gladys: send
+      // them again now, and refresh the widgets that pick this stop.
       await publishStopStates(followed, snapshot).catch((err) =>
         logger.warn(`Unable to publish the states of ${followed.name}: ${err.message}`),
       );
+      gladys.requestWidgetRefresh(WIDGETS.DEPARTURES);
     }
   } else if (parsed?.type === DEVICE_TYPES.LINE && traffic.answer) {
     const line = lines.find((candidate) => candidate.id.toLowerCase() === parsed.key);
@@ -851,6 +854,7 @@ gladys.onDeviceCreated(async (device) => {
         .catch((err) =>
           logger.warn(`Unable to publish the traffic of ${line.name}: ${err.message}`),
         );
+      gladys.requestWidgetRefresh(WIDGETS.TRAFFIC);
     }
   }
 });
