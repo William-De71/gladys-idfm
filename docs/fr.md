@@ -88,6 +88,8 @@ Un événement n'est déclenché qu'une fois par départ ou par perturbation, m�
 
 ## Widgets
 
+![Le widget « Départs IDFM » (les prochains RER B à Massy - Palaiseau, dont un en retard et un supprimé) à côté du widget « Trafic IDFM » (RER B interrompu, travaux prévus sur la ligne 13) — illustration générée, pas une capture d’écran](https://raw.githubusercontent.com/William-De71/gladys-idfm/main/docs/assets/widgets.fr.png)
+
 - **Départs IDFM** : les prochains départs d'un arrêt, comme sur les écrans en gare, avec « dans N min », « +N min », « Supprimé » ou « À quai ». Choisissez un arrêt suivi, ou saisissez un autre arrêt (et sa ligne) directement dans le widget — attention, il consomme alors le quota à chaque rafraîchissement.
 - **Trafic IDFM** : l'état de chaque ligne suivie (ou de celles saisies dans le widget), puis les perturbations en cours et celles prévues dans les 24 heures ; touchez-en une pour lire le message complet.
 

@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![Île-de-France Mobilités für Gladys Assistant](cover.jpg)
+
 Externe Integration für [Gladys Assistant](https://gladysassistant.com) für den **öffentlichen Nahverkehr im
 Großraum Paris**: die nächsten Abfahrten deiner Haltestellen in Echtzeit — RER, Transilien, Metro, Tram, Bus — mit
 Verspätungen und Ausfällen, und der **Verkehr** deiner Linien (Störungen, Bauarbeiten), als Geräte,
@@ -17,6 +19,8 @@ Daten: [PRIM](https://prim.iledefrance-mobilites.fr), die Open-Data-Plattform vo
 (kostenloser Schlüssel, 1 000 Anfragen pro Tag und API bei einem neuen Konto), und die offenen Referenzdaten von
 [data.iledefrance-mobilites.fr](https://data.iledefrance-mobilites.fr) (ohne Schlüssel), um Linien und
 Haltestellen zu finden.
+
+![Das Widget „IDFM-Abfahrten“ (die nächsten RER B in Massy - Palaiseau, einer verspätet, einer fällt aus) neben dem Widget „IDFM-Verkehr“ (RER B unterbrochen, Bauarbeiten auf Linie 13 geplant) — generierte Illustration, kein Screenshot](docs/assets/widgets.de.png)
 
 Benutzerdokumentation: [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch](docs/de.md) ·
 [Español](docs/es.md).
@@ -243,6 +247,8 @@ jeden Widget-Inhalt mit `validateWidgetContent` des SDK. Über die Unit-Tests hi
 - `test/i18n.test.js` prüft die vier Sprachen (Manifest, Laufzeittexte, Docs, READMEs) und validiert die
   Widget-Inhalte in jeder;
 - `test/release.test.js` deckt das Release-Skript ab (Version, Changelog, Versionssprung).
+- `docs/illustrations/render.sh` erzeugt die Widget-Illustrationen in `docs/assets` aus dem Widget-Code neu
+  (Headless-Chrome, Styles des Gladys-Frontends): nach jeder Änderung an einem Widget erneut ausführen.
 
 `gladys_version` ist `>=5.1.1` (Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`).
 

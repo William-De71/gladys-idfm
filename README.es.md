@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![Île-de-France Mobilités para Gladys Assistant](cover.jpg)
+
 Integración externa de [Gladys Assistant](https://gladysassistant.com) para el **transporte público de la región
 de París**: las próximas salidas de tus paradas en tiempo real — RER, Transilien, metro, tranvía, autobús — con
 retrasos y cancelaciones, y el **tráfico** de tus líneas (incidencias, obras), como dispositivos, **disparadores de
@@ -16,6 +18,8 @@ Datos: [PRIM](https://prim.iledefrance-mobilites.fr), la plataforma de datos abi
 (clave gratuita, 1 000 peticiones al día por API en una cuenta nueva), y los datos de referencia abiertos de
 [data.iledefrance-mobilites.fr](https://data.iledefrance-mobilites.fr) (sin clave) para encontrar líneas y
 paradas.
+
+![El widget «Salidas IDFM» (los próximos RER B en Massy - Palaiseau, uno con retraso y otro cancelado) junto al widget «Tráfico IDFM» (RER B interrumpido, obras previstas en la línea 13) — ilustración generada, no una captura de pantalla](docs/assets/widgets.es.png)
 
 Documentación de usuario: [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch](docs/de.md) ·
 [Español](docs/es.md).
@@ -240,6 +244,8 @@ contenido de widget con `validateWidgetContent` del SDK. Además de las pruebas 
 - `test/i18n.test.js` comprueba los cuatro idiomas (manifiesto, textos en ejecución, docs, README) y valida los
   contenidos de widget en cada uno;
 - `test/release.test.js` cubre el script de release (versión, changelog, subida de versión).
+- `docs/illustrations/render.sh` regenera las ilustraciones de los widgets de `docs/assets` a partir del código de
+  los widgets (Chrome headless, estilos del front de Gladys): vuelve a ejecutarlo tras cualquier cambio de un widget.
 
 `gladys_version` es `>=5.1.1` (widgets, disparadores y acciones de escena, `source: "devices"`).
 

@@ -88,6 +88,8 @@ Ein Ereignis löst nur einmal pro Abfahrt oder Störung aus, auch nach einem Neu
 
 ## Widgets
 
+![Das Widget „IDFM-Abfahrten“ (die nächsten RER B in Massy - Palaiseau, einer verspätet, einer fällt aus) neben dem Widget „IDFM-Verkehr“ (RER B unterbrochen, Bauarbeiten auf Linie 13 geplant) — generierte Illustration, kein Screenshot](https://raw.githubusercontent.com/William-De71/gladys-idfm/main/docs/assets/widgets.de.png)
+
 - **IDFM-Abfahrten**: die nächsten Abfahrten einer Haltestelle wie auf den Anzeigetafeln am Bahnhof, mit „N min“, „+N min“, „Fällt aus“ oder „Am Bahnsteig“. Wähle eine verfolgte Haltestelle oder gib eine andere Haltestelle (und ihre Linie) direkt im Widget ein — sie verbraucht dann bei jeder Aktualisierung Kontingent.
 - **IDFM-Verkehr**: der Zustand jeder verfolgten Linie (oder der im Widget eingegebenen), dann die aktuellen Störungen und die in den nächsten 24 Stunden geplanten; tippe auf eine, um die ganze Meldung zu lesen.
 

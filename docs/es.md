@@ -88,6 +88,8 @@ Un evento solo se dispara una vez por salida o incidencia, incluso tras un reini
 
 ## Widgets
 
+![El widget «Salidas IDFM» (los próximos RER B en Massy - Palaiseau, uno con retraso y otro cancelado) junto al widget «Tráfico IDFM» (RER B interrumpido, obras previstas en la línea 13) — ilustración generada, no una captura de pantalla](https://raw.githubusercontent.com/William-De71/gladys-idfm/main/docs/assets/widgets.es.png)
+
 - **Salidas IDFM**: las próximas salidas de una parada, como en las pantallas de las estaciones, con «N min», «+N min», «Cancelado» o «En andén». Elige una parada seguida, o escribe otra parada (y su línea) directamente en el widget — entonces consume cuota en cada actualización.
 - **Tráfico IDFM**: el estado de cada línea seguida (o de las escritas en el widget), y después las incidencias en curso y las previstas en las próximas 24 horas; toca una para leer el mensaje completo.
 

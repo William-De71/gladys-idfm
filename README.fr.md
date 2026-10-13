@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![Île-de-France Mobilités pour Gladys Assistant](cover.jpg)
+
 Intégration externe de [Gladys Assistant](https://gladysassistant.com) pour les **transports en commun
 franciliens** : les prochains départs de vos arrêts en temps réel — RER, Transilien, métro, tram, bus — avec
 retards et suppressions, et le **trafic** de vos lignes (incidents, travaux), sous forme d’appareils, de
@@ -16,6 +18,8 @@ retards et suppressions, et le **trafic** de vos lignes (incidents, travaux), so
 Données : [PRIM](https://prim.iledefrance-mobilites.fr), la plateforme de données ouvertes d’Île-de-France
 Mobilités (clé gratuite, 1 000 requêtes par jour et par API sur un nouveau compte), et les référentiels ouverts de
 [data.iledefrance-mobilites.fr](https://data.iledefrance-mobilites.fr) (sans clé) pour trouver lignes et arrêts.
+
+![Le widget « Départs IDFM » (les prochains RER B à Massy - Palaiseau, dont un en retard et un supprimé) à côté du widget « Trafic IDFM » (RER B interrompu, travaux prévus sur la ligne 13) — illustration générée, pas une capture d’écran](docs/assets/widgets.fr.png)
 
 Documentation utilisateur : [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch](docs/de.md) ·
 [Español](docs/es.md).
@@ -241,6 +245,8 @@ vérifient chaque contenu de widget avec `validateWidgetContent` du SDK. En plus
 - `test/i18n.test.js` vérifie les quatre langues (manifeste, textes à l’exécution, docs, README) et valide les
   contenus de widget dans chacune ;
 - `test/release.test.js` couvre le script de release (version, changelog, montée de version).
+- `docs/illustrations/render.sh` régénère les illustrations des widgets de `docs/assets` à partir du code des
+  widgets (Chrome headless, styles du front Gladys) : relancez-le après tout changement d’un widget.
 
 `gladys_version` vaut `>=5.1.1` (widgets, déclencheurs et actions de scène, `source: "devices"`).
 

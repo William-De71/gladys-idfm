@@ -88,6 +88,8 @@ An event fires only once per departure or disruption, even after a restart.
 
 ## Widgets
 
+![The "IDFM departures" widget (the next RER B at Massy - Palaiseau, one late, one cancelled) next to the "IDFM traffic" widget (the RER B interrupted, works planned on line 13) — generated illustration, not a screenshot](https://raw.githubusercontent.com/William-De71/gladys-idfm/main/docs/assets/widgets.en.png)
+
 - **IDFM departures**: the next departures of a stop, like the station screens, with "N min", "+N min", "Cancelled" or "At the stop". Pick a followed stop, or type another stop (and its line) in the widget — it then spends the quota on every refresh.
 - **IDFM traffic**: the state of each followed line (or of the ones typed in the widget), then the current disruptions and the ones planned in the next 24 hours; tap one to read the full message.
 

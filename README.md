@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![Île-de-France Mobilités for Gladys Assistant](cover.jpg)
+
 External [Gladys Assistant](https://gladysassistant.com) integration for the **public transport of the Paris region**:
 the next departures of your stops in real time — RER, Transilien, metro, tram, bus — with delays and cancellations,
 and the **traffic** of your lines (incidents, works), as devices, **scene triggers**, **scene actions** and
@@ -15,6 +17,8 @@ and the **traffic** of your lines (incidents, works), as devices, **scene trigge
 Data: [PRIM](https://prim.iledefrance-mobilites.fr), the open data platform of Île-de-France Mobilités (free key,
 1 000 requests a day per API on a new account), and the open reference data of
 [data.iledefrance-mobilites.fr](https://data.iledefrance-mobilites.fr) (no key) to find lines and stops.
+
+![The "IDFM departures" widget (the next RER B at Massy - Palaiseau, one late, one cancelled) next to the "IDFM traffic" widget (the RER B interrupted, works planned on line 13) — generated illustration, not a screenshot](docs/assets/widgets.en.png)
 
 User documentation: [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch](docs/de.md) · [Español](docs/es.md).
 
@@ -231,6 +235,8 @@ with the SDK `validateWidgetContent`. Beyond the unit tests:
 - `test/i18n.test.js` checks the four languages (manifest, runtime texts, docs, READMEs) and validates the widget
   contents in each;
 - `test/release.test.js` covers the release script (version, changelog, bump).
+- `docs/illustrations/render.sh` regenerates the widget illustrations of `docs/assets` from the widget code
+  (headless Chrome, the Gladys front styles): run it after any change to a widget.
 
 `gladys_version` is `>=5.1.1` (widgets, scene triggers and actions, `source: "devices"`).
 
