@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [1.1.1] - 2026-10-24
+
+### Security
+
+- build the image on Node.js 24.22.1 or later ([bdd302e](https://github.com/William-De71/gladys-idfm/commit/bdd302ec3908b34f74027512c12a6b50aff245bf))
+
 ## [1.1.0] - 2026-10-13
 
 ### Added
@@ -22,4 +28,5 @@ each release from the Conventional Commits: do not edit it by hand.
 
 * Île-de-France Mobilités in real time: departures, traffic, scenes and widgets ([e25c9da](https://github.com/William-De71/gladys-idfm/commit/e25c9dacb96c0d62c1cd93b95a052f0d32f167a7))
 
+[1.1.1]: https://github.com/William-De71/gladys-idfm/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/William-De71/gladys-idfm/compare/v1.0.0...v1.1.0
