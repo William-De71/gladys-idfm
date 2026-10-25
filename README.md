@@ -5,14 +5,14 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/William-De71/gladys-idfm?sort=semver)](https://github.com/William-De71/gladys-idfm/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Île-de-France Mobilités for Gladys Assistant](cover.jpg)
 
 External [Gladys Assistant](https://gladysassistant.com) integration for the **public transport of the Paris region**:
 the next departures of your stops in real time — RER, Transilien, metro, tram, bus — with delays and cancellations,
 and the **traffic** of your lines (incidents, works), as devices, **scene triggers**, **scene actions** and
-**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.15.
+**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.16.
 
 Data: [PRIM](https://prim.iledefrance-mobilites.fr), the open data platform of Île-de-France Mobilités (free key,
 1 000 requests a day per API on a new account), and the open reference data of
@@ -238,7 +238,7 @@ with the SDK `validateWidgetContent`. Beyond the unit tests:
 - `docs/illustrations/render.sh` regenerates the widget illustrations of `docs/assets` from the widget code
   (headless Chrome, the Gladys front styles): run it after any change to a widget.
 
-`gladys_version` is `>=5.1.1` (widgets, scene triggers and actions, `source: "devices"`).
+`gladys_version` is `>=5.3.0` (catalog keywords and countries of Gladys 5.3, widgets, scene triggers and actions, `source: "devices"`).
 
 For development only, `IDFM_PRIM_URL` and `IDFM_OPENDATA_URL` point the clients to other servers and
 `IDFM_DATA_DIR` moves the files of `/data`.

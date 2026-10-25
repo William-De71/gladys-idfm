@@ -5,7 +5,7 @@
 [![Licence : Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
 [![Dernière version](https://img.shields.io/github/v/release/William-De71/gladys-idfm?sort=semver)](https://github.com/William-De71/gladys-idfm/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Île-de-France Mobilités pour Gladys Assistant](cover.jpg)
 
@@ -13,7 +13,7 @@ Intégration externe de [Gladys Assistant](https://gladysassistant.com) pour les
 franciliens** : les prochains départs de vos arrêts en temps réel — RER, Transilien, métro, tram, bus — avec
 retards et suppressions, et le **trafic** de vos lignes (incidents, travaux), sous forme d’appareils, de
 **déclencheurs de scène**, d’**actions de scène** et de **widgets de tableau de bord**, construite sur
-`@gladysassistant/integration-sdk` 0.15.
+`@gladysassistant/integration-sdk` 0.16.
 
 Données : [PRIM](https://prim.iledefrance-mobilites.fr), la plateforme de données ouvertes d’Île-de-France
 Mobilités (clé gratuite, 1 000 requêtes par jour et par API sur un nouveau compte), et les référentiels ouverts de
@@ -248,7 +248,7 @@ vérifient chaque contenu de widget avec `validateWidgetContent` du SDK. En plus
 - `docs/illustrations/render.sh` régénère les illustrations des widgets de `docs/assets` à partir du code des
   widgets (Chrome headless, styles du front Gladys) : relancez-le après tout changement d’un widget.
 
-`gladys_version` vaut `>=5.1.1` (widgets, déclencheurs et actions de scène, `source: "devices"`).
+`gladys_version` vaut `>=5.3.0` (mots-clés et pays du catalogue de Gladys 5.3, widgets, déclencheurs et actions de scène, `source: "devices"`).
 
 Pour le développement uniquement, `IDFM_PRIM_URL` et `IDFM_OPENDATA_URL` dirigent les clients vers d’autres
 serveurs et `IDFM_DATA_DIR` déplace les fichiers de `/data`.

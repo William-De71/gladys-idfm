@@ -5,14 +5,14 @@
 [![Licencia: Apache-2.0](https://img.shields.io/badge/licencia-Apache--2.0-blue.svg)](LICENSE)
 [![Última versión](https://img.shields.io/github/v/release/William-De71/gladys-idfm?sort=semver)](https://github.com/William-De71/gladys-idfm/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Île-de-France Mobilités para Gladys Assistant](cover.jpg)
 
 Integración externa de [Gladys Assistant](https://gladysassistant.com) para el **transporte público de la región
 de París**: las próximas salidas de tus paradas en tiempo real — RER, Transilien, metro, tranvía, autobús — con
 retrasos y cancelaciones, y el **tráfico** de tus líneas (incidencias, obras), como dispositivos, **disparadores de
-escena**, **acciones de escena** y **widgets del panel**, construida sobre `@gladysassistant/integration-sdk` 0.15.
+escena**, **acciones de escena** y **widgets del panel**, construida sobre `@gladysassistant/integration-sdk` 0.16.
 
 Datos: [PRIM](https://prim.iledefrance-mobilites.fr), la plataforma de datos abiertos de Île-de-France Mobilités
 (clave gratuita, 1 000 peticiones al día por API en una cuenta nueva), y los datos de referencia abiertos de
@@ -247,7 +247,7 @@ contenido de widget con `validateWidgetContent` del SDK. Además de las pruebas 
 - `docs/illustrations/render.sh` regenera las ilustraciones de los widgets de `docs/assets` a partir del código de
   los widgets (Chrome headless, estilos del front de Gladys): vuelve a ejecutarlo tras cualquier cambio de un widget.
 
-`gladys_version` es `>=5.1.1` (widgets, disparadores y acciones de escena, `source: "devices"`).
+`gladys_version` es `>=5.3.0` (palabras clave y países del catálogo de Gladys 5.3, widgets, disparadores y acciones de escena, `source: "devices"`).
 
 Solo para desarrollo, `IDFM_PRIM_URL` e `IDFM_OPENDATA_URL` dirigen los clientes a otros servidores e
 `IDFM_DATA_DIR` mueve los archivos de `/data`.

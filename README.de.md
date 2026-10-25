@@ -5,7 +5,7 @@
 [![Lizenz: Apache-2.0](https://img.shields.io/badge/Lizenz-Apache--2.0-blue.svg)](LICENSE)
 [![Neueste Version](https://img.shields.io/github/v/release/William-De71/gladys-idfm?sort=semver)](https://github.com/William-De71/gladys-idfm/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-idfm/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-idfm/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Île-de-France Mobilités für Gladys Assistant](cover.jpg)
 
@@ -250,7 +250,7 @@ jeden Widget-Inhalt mit `validateWidgetContent` des SDK. Über die Unit-Tests hi
 - `docs/illustrations/render.sh` erzeugt die Widget-Illustrationen in `docs/assets` aus dem Widget-Code neu
   (Headless-Chrome, Styles des Gladys-Frontends): nach jeder Änderung an einem Widget erneut ausführen.
 
-`gladys_version` ist `>=5.1.1` (Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`).
+`gladys_version` ist `>=5.3.0` (Katalog-Suchbegriffe und Länder von Gladys 5.3, Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`).
 
 Nur für die Entwicklung: `IDFM_PRIM_URL` und `IDFM_OPENDATA_URL` leiten die Clients auf andere Server um, und
 `IDFM_DATA_DIR` verschiebt die Dateien von `/data`.
