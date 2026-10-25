@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [1.2.0] - 2026-10-25
+
+### Added
+
+- list the integration under the new Transport shelf of the catalog ([f8f19ac](https://github.com/William-De71/gladys-idfm/commit/f8f19acd72acfcd69b9f07dc4dd78afe42e927ff))
+
 ## [1.1.1] - 2026-10-24
 
 ### Security
@@ -28,5 +34,6 @@ each release from the Conventional Commits: do not edit it by hand.
 
 * Île-de-France Mobilités in real time: departures, traffic, scenes and widgets ([e25c9da](https://github.com/William-De71/gladys-idfm/commit/e25c9dacb96c0d62c1cd93b95a052f0d32f167a7))
 
+[1.2.0]: https://github.com/William-De71/gladys-idfm/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/William-De71/gladys-idfm/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/William-De71/gladys-idfm/compare/v1.0.0...v1.1.0
