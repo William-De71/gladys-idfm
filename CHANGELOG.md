@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [1.3.0] - 2026-10-25
+
+### Added
+
+- require Gladys 5.3 and declare catalog keywords and countries ([6a117eb](https://github.com/William-De71/gladys-idfm/commit/6a117ebc2b062a50a4b0cce1f2d7987f0a61fe8a))
+
 ## [1.2.0] - 2026-10-25
 
 ### Added
@@ -34,6 +40,7 @@ each release from the Conventional Commits: do not edit it by hand.
 
 * Île-de-France Mobilités in real time: departures, traffic, scenes and widgets ([e25c9da](https://github.com/William-De71/gladys-idfm/commit/e25c9dacb96c0d62c1cd93b95a052f0d32f167a7))
 
+[1.3.0]: https://github.com/William-De71/gladys-idfm/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/William-De71/gladys-idfm/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/William-De71/gladys-idfm/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/William-De71/gladys-idfm/compare/v1.0.0...v1.1.0
